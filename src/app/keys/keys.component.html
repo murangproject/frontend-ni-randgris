@@ -1,0 +1,29 @@
+<div class="flex h-full w-full flex-col p-4">
+  <div class="flex">
+    <p class="text-lg font-bold">Room Keys</p>
+  </div>
+  <div class="flex flex-row flex-wrap gap-2 mt-4">
+    <app-key (handleClick)="openRoomKeyModal()" />
+  </div>
+</div>
+
+<div class="modal modal-bottom sm:modal-middle" [ngClass]="{'modal-open': roomKeyModalState}">
+  <div class="modal-box">
+    <h3 class="font-bold text-lg">Room Key</h3>
+    <div class="flex flex-col justify-center">
+      <div class="flex flex-col gap-2">
+        <p class="text-lg font-bold">Room Name: Lab 1</p>
+        <p class="text-lg font-bold">Current Scheduled: John Doe</p>
+        <p class="text-lg font-bold">Borrow Time: ~</p>
+        <p class="text-lg font-bold">Return Time: ~</p>
+      </div>
+      <div
+        class="flex w-[200px] h-[200px] shadow-lg rounded-lg items-center justify-center border-2 border-neutral border-dashed bg-success text-success-content hover:bg-neutral hover:text-neutral-content mx-auto mt-5">
+        <p class="text-lg">Borrow</p>
+      </div>
+    </div>
+    <div class="modal-action">
+      <label class="btn btn-ghost" (click)="closeRoomKeyModal()">Close</label>
+    </div>
+  </div>
+</div>

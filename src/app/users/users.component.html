@@ -1,0 +1,289 @@
+<div class="h-full">
+  <div class="flex flex-row flex-wrap justify-between items-center">
+    <div class="tabs tabs-boxed bg-base-100">
+      <a class="tab" [ngClass]="{'tab-active': currentTab === 'all'}" (click)="setTab('tab')">All</a>
+      <a class="tab" [ngClass]="{'tab-active': currentTab === 'faculty'}" (click)="setTab('faculty')">Faculty</a>
+      <a class="tab" [ngClass]="{'tab-active': currentTab === 'attendance_checker'}"
+        (click)="setTab('attendance_checker')">Attendance Checker</a>
+      <a class="tab" [ngClass]="{'tab-active': currentTab === 'archived'}" (click)="setTab('archived')">Archived</a>
+    </div>
+    <div class="flex">
+      <button class="btn btn-sm" (click)="openCreateUserModal()">Create User</button>
+    </div>
+  </div>
+
+  <!-- TABLE -->
+  <ng-container *ngIf="currentTab === 'all'">
+    <div class="overflow-x-auto">
+      <table class="table table-compact w-full text-center">
+        <thead>
+          <tr>
+            <th></th>
+            <th>First Name</th>
+            <th>Middle Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th>1</th>
+            <td>John</td>
+            <td>Michael</td>
+            <td>Doe</td>
+            <td>johndoe@email.com</td>
+            <td>Admin</td>
+            <td class="space-x-2">
+              <button class="btn btn-sm" (click)="openEditUserModal()">Edit</button>
+              <button class="btn btn-sm" (click)="openArchiveUserModal()">Archive</button>
+              <button class="btn btn-sm" (click)="openResetPasswordUserModal()">Reset</button>
+            </td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <th></th>
+            <th>First Name</th>
+            <th>Middle Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Action</th>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="currentTab === 'faculty'">
+    <div class="overflow-x-auto">
+      <table class="table table-compact w-full text-center">
+        <thead>
+          <tr>
+            <th></th>
+            <th>First Name</th>
+            <th>Middle Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th>1</th>
+            <td>John</td>
+            <td>Michael</td>
+            <td>Doe</td>
+            <td>johndoe@email.com</td>
+            <td class="space-x-2">
+              <button class="btn btn-sm" (click)="openEditUserModal()">Edit</button>
+              <button class="btn btn-sm" (click)="openArchiveUserModal()">Archive</button>
+              <button class="btn btn-sm" (click)="openResetPasswordUserModal()">Reset</button>
+            </td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <th></th>
+            <th>First Name</th>
+            <th>Middle Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+            <th>Action</th>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="currentTab === 'attendance_checker'">
+    <div class="overflow-x-auto">
+      <table class="table table-compact w-full text-center">
+        <thead>
+          <tr>
+            <th></th>
+            <th>First Name</th>
+            <th>Middle Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th>1</th>
+            <td>John</td>
+            <td>Michael</td>
+            <td>Doe</td>
+            <td>johndoe@email.com</td>
+            <td class="space-x-2">
+              <button class="btn btn-sm">Edit</button>
+              <button class="btn btn-sm">Archive</button>
+              <button class="btn btn-sm">Reset</button>
+            </td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <th></th>
+            <th>First Name</th>
+            <th>Middle Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+            <th>Action</th>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="currentTab === 'archived'">
+    <div class="overflow-x-auto">
+      <table class="table table-compact w-full text-center">
+        <thead>
+          <tr>
+            <th></th>
+            <th>First Name</th>
+            <th>Middle Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th>1</th>
+            <td>John</td>
+            <td>Michael</td>
+            <td>Doe</td>
+            <td>johndoe@email.com</td>
+            <td>Admin</td>
+            <td class="space-x-2">
+              <button class="btn btn-sm" (click)="openRestoreUserModal()">Restore</button>
+            </td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <th></th>
+            <th>First Name</th>
+            <th>Middle Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Action</th>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </ng-container>
+
+</div>
+
+
+<!-- Create User Modal -->
+<div class="modal modal-bottom sm:modal-middle" [ngClass]="{'modal-open': createUserModalState}">
+  <div class="modal-box">
+    <h3 class="font-bold text-lg">Create User Account</h3>
+    <form>
+      <div class="mt-5">
+        <div class="form-control py-2 max-w-xs mx-auto">
+          <input type="text" class="input input-bordered" placeholder="First Name" />
+        </div>
+        <div class="form-control py-2 max-w-xs mx-auto">
+          <input type="text" class="input input-bordered" placeholder="Middle Name" />
+        </div>
+        <div class="form-control py-2 max-w-xs mx-auto">
+          <input type="text" class="input input-bordered" placeholder="Last Name" />
+        </div>
+        <div class="form-control py-2 max-w-xs mx-auto">
+          <input type="text" class="input input-bordered" placeholder="Email" />
+        </div>
+        <div class="form-control py-2 max-w-xs mx-auto">
+          <select class="select select-bordered w-full">
+            <option disabled selected>Select role</option>
+            <option>Attendance Checker</option>
+            <option>Faculty</option>
+          </select>
+        </div>
+      </div>
+    </form>
+    <div class="modal-action">
+      <button class="btn" (click)="closeCreateUserModal()">Confirm</button>
+      <button class="btn btn-ghost" (click)="closeCreateUserModal()">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- Edit User Modal -->
+<div class="modal modal-bottom sm:modal-middle" [ngClass]="{'modal-open': edituserModalState}">
+  <div class="modal-box">
+    <h3 class="font-bold text-lg">Edit User Account</h3>
+    <form>
+      <div class="mt-5">
+        <div class="form-control py-2 max-w-xs mx-auto">
+          <input type="text" class="input input-bordered" placeholder="First Name" />
+        </div>
+        <div class="form-control py-2 max-w-xs mx-auto">
+          <input type="text" class="input input-bordered" placeholder="Middle Name" />
+        </div>
+        <div class="form-control py-2 max-w-xs mx-auto">
+          <input type="text" class="input input-bordered" placeholder="Last Name" />
+        </div>
+        <div class="form-control py-2 max-w-xs mx-auto">
+          <input type="text" class="input input-bordered" placeholder="Email" />
+        </div>
+        <div class="form-control py-2 max-w-xs mx-auto">
+          <select class="select select-bordered w-full">
+            <option disabled selected>Select role</option>
+            <option>Attendance Checker</option>
+            <option>Faculty</option>
+          </select>
+        </div>
+      </div>
+    </form>
+    <div class="modal-action">
+      <button class="btn" (click)="closeEditUserModal()">Confirm</button>
+      <button class="btn btn-ghost" (click)="closeEditUserModal()">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- Archive User -->
+<div class="modal modal-bottom sm:modal-middle" [ngClass]="{'modal-open': archiveUserModalState}">
+  <div class="modal-box">
+    <h3 class="font-bold text-lg">Archive User Account</h3>
+    <p class="text-base mt-2">Are you sure you want to archive this account?</p>
+    <div class="modal-action">
+      <button class="btn" (click)="closeArchiveUserModal()">Confirm</button>
+      <button class="btn btn-ghost" (click)="closeArchiveUserModal()">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- Reset User -->
+<div class="modal modal-bottom sm:modal-middle" [ngClass]="{'modal-open': resetPasswordUserModalState}">
+  <div class="modal-box">
+    <h3 class="font-bold text-lg">Reset User Password</h3>
+    <p class="text-base mt-2">Are you sure you want to reset the password of this account?</p>
+    <div class="modal-action">
+      <button class="btn" (click)="closeResetPasswordUserModal()">Confirm</button>
+      <button class="btn btn-ghost" (click)="closeResetPasswordUserModal()">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- Restore User -->
+<div class="modal modal-bottom sm:modal-middle" [ngClass]="{'modal-open': restoreUserModalState}">
+  <div class="modal-box">
+    <h3 class="font-bold text-lg">Restore User</h3>
+    <p class="text-base mt-2">Are you sure you want to restore this account?</p>
+    <div class="modal-action">
+      <button class="btn" (click)="closeRestoreUserModal()">Confirm</button>
+      <button class="btn btn-ghost" (click)="closeRestoreUserModal()">Close</button>
+    </div>
+  </div>
+</div>

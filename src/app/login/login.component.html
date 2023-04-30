@@ -8,22 +8,22 @@
       <h1 class="text-2xl font-bold text-base-content text-center">
         Login Page
       </h1>
-      <form class="flex flex-col gap-4 mt-10">
+      <form class="flex flex-col gap-4 mt-10" [formGroup]="form">
         <div class="flex form-control w-full max-w-xs">
           <label class="label">
             <span class="label-text">Email Address</span>
           </label>
-          <input type="text" placeholder="Type here" class="input input-bordered w-full max-w-xs" />
+          <input type="text" placeholder="Type here" class="input input-bordered w-full max-w-xs" formControlName="email" />
         </div>
         <div class="flex form-control w-full max-w-xs">
           <label class="label">
             <span class="label-text">Password</span>
           </label>
 
-          <input type="password" placeholder="Type here" class="input input-bordered w-full max-w-xs" />
+          <input type="password" placeholder="Type here" class="input input-bordered w-full max-w-xs" formControlName="password" />
         </div>
 
-        <button class="mt-4 btn btn-neutral text-neutral-content gap-4">
+        <button class="mt-4 btn btn-neutral text-neutral-content gap-4" (click)="onSubmit()">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
             stroke="currentColor" class="w-6 h-6">
             <path stroke-linecap="round" stroke-linejoin="round"

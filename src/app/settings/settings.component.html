@@ -1,0 +1,275 @@
+<div class="h-full">
+  <div class="flex flex-row flex-wrap justify-between items-center">
+    <div class="tabs tabs-boxed bg-base-100">
+      <a class="tab" [ngClass]="{'tab-active': currentTab === 'section'}" (click)="setTab('SECTION')">Sections</a>
+      <a class="tab" [ngClass]="{'tab-active': currentTab === 'subject'}" (click)="setTab('SUBJECT')">Subjects</a>
+      <a class="tab" [ngClass]="{'tab-active': currentTab === 'room'}" (click)="setTab('ROOM')">Rooms</a>
+    </div>
+    <ng-container *ngIf="currentTab === 'section'">
+      <div class="flex">
+        <button class="btn btn-sm" (click)="openCreateSectionModal()">Create Section</button>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="currentTab === 'subject'">
+      <div class="flex">
+        <button class="btn btn-sm" (click)="openCreateSubjectModal()">Create Subject</button>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="currentTab === 'room'">
+      <div class="flex">
+        <button class="btn btn-sm" (click)="openCreateRoomModal()">Create Room</button>
+      </div>
+    </ng-container>
+  </div>
+
+  <ng-container *ngIf="currentTab === 'section'">
+    <div class="overflow-x-auto">
+      <table class="table table-compact w-full text-center">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Section Name</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th>1</th>
+            <td>IT-A</td>
+            <td class="space-x-2">
+              <button class="btn btn-sm" (click)="openEditSectionModal()">Edit</button>
+              <button class="btn btn-sm" (click)="openArchiveSectionModal()">Archive</button>
+            </td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <th></th>
+            <th>Section Name</th>
+            <th>Action</th>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="currentTab === 'subject'">
+    <div class="overflow-x-auto">
+      <table class="table table-compact w-full text-center">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Subject Code</th>
+            <th>Subject Name</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th>1</th>
+            <td>CP101</td>
+            <td>Computer Programming 1</td>
+            <td class="space-x-2">
+              <button class="btn btn-sm" (click)="openEditSubjectModal()">Edit</button>
+              <button class="btn btn-sm" (click)="openArchiveSubjectModal()">Archive</button>
+            </td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <th></th>
+            <th>Subject Code</th>
+            <th>Subject Name</th>
+            <th>Action</th>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="currentTab === 'room'">
+    <div class="overflow-x-auto">
+      <table class="table table-compact w-full text-center">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Room Name</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th>1</th>
+            <td>Room 101</td>
+            <td class="space-x-2">
+              <button class="btn btn-sm" (click)="openEditRoomModal()">Edit</button>
+              <button class="btn btn-sm" (click)="openArchiveRoomModal()">Archive</button>
+            </td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <th></th>
+            <th>Room Name</th>
+            <th>Action</th>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </ng-container>
+</div>
+
+<!-- Create Section -->
+<div class="modal modal-bottom sm:modal-middle" [ngClass]="{'modal-open': createSectionModalState}">
+  <div class="modal-box">
+    <h3 class="font-bold text-lg">Create Section</h3>
+    <form>
+      <div class="mt-5">
+        <div class="form-control py-2 max-w-xs mx-auto">
+          <input type="text" class="input input-bordered" placeholder="Section Name" />
+        </div>
+      </div>
+    </form>
+    <div class="modal-action">
+      <button class="btn" (click)="closeCreateSectionModal()">Confirm</button>
+      <button class="btn btn-ghost" (click)="closeCreateSectionModal()">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- Create Section -->
+<div class="modal modal-bottom sm:modal-middle" [ngClass]="{'modal-open': editSectionModalState}">
+  <div class="modal-box">
+    <h3 class="font-bold text-lg">Create Section</h3>
+    <form>
+      <div class="mt-5">
+        <div class="form-control py-2 max-w-xs mx-auto">
+          <input type="text" class="input input-bordered" placeholder="Section Name" />
+        </div>
+      </div>
+    </form>
+    <div class="modal-action">
+      <button class="btn" (click)="closeEditSectionModal()">Confirm</button>
+      <button class="btn btn-ghost" (click)="closeEditSectionModal()">Close</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- Archive Section -->
+<div class="modal modal-bottom sm:modal-middle" [ngClass]="{'modal-open': archiveSectionModalState}">
+  <div class="modal-box">
+    <h3 class="font-bold text-lg">Delete Section</h3>
+    <p class="text-base mt-2">Are you sure you want to delete this section?</p>
+    <div class="modal-action">
+      <button class="btn" (click)="closeArchiveSectionModal()">Confirm</button>
+      <button class="btn btn-ghost" (click)="closeArchiveSectionModal()">Close</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- Create Subject -->
+<div class="modal modal-bottom sm:modal-middle" [ngClass]="{'modal-open': createSubjectModalState}">
+  <div class="modal-box">
+    <h3 class="font-bold text-lg">Create Subject</h3>
+    <form>
+      <div class="mt-5">
+        <div class="form-control py-2 max-w-xs mx-auto">
+          <input type="text" class="input input-bordered" placeholder="Subject Code" />
+        </div>
+        <div class="form-control py-2 max-w-xs mx-auto">
+          <input type="text" class="input input-bordered" placeholder="Subject Name" />
+        </div>
+      </div>
+    </form>
+    <div class="modal-action">
+      <button class="btn" (click)="closeCreateSubjectModal()">Confirm</button>
+      <button class="btn btn-ghost" (click)="closeCreateSubjectModal()">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- Create Subject -->
+<div class="modal modal-bottom sm:modal-middle" [ngClass]="{'modal-open': editSubjectModalState}">
+  <div class="modal-box">
+    <h3 class="font-bold text-lg">Create Subject</h3>
+    <form>
+      <div class="mt-5">
+        <div class="form-control py-2 max-w-xs mx-auto">
+          <input type="text" class="input input-bordered" placeholder="Subject Code" />
+        </div>
+        <div class="form-control py-2 max-w-xs mx-auto">
+          <input type="text" class="input input-bordered" placeholder="Subject Name" />
+        </div>
+      </div>
+    </form>
+    <div class="modal-action">
+      <button class="btn" (click)="closeEditSubjectModal()">Confirm</button>
+      <button class="btn btn-ghost" (click)="closeEditSubjectModal()">Close</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- Archive Subject -->
+<div class="modal modal-bottom sm:modal-middle" [ngClass]="{'modal-open': archiveSubjectModalState}">
+  <div class="modal-box">
+    <h3 class="font-bold text-lg">Delete Subject</h3>
+    <p class="text-base mt-2">Are you sure you want to delete this subject?</p>
+    <div class="modal-action">
+      <button class="btn" (click)="closeArchiveSubjectModal()">Confirm</button>
+      <button class="btn btn-ghost" (click)="closeArchiveSubjectModal()">Close</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- Create Room -->
+<div class="modal modal-bottom sm:modal-middle" [ngClass]="{'modal-open': createRoomModalState}">
+  <div class="modal-box">
+    <h3 class="font-bold text-lg">Create Room</h3>
+    <form>
+      <div class="mt-5">
+        <div class="form-control py-2 max-w-xs mx-auto">
+          <input type="text" class="input input-bordered" placeholder="Room Name" />
+        </div>
+      </div>
+    </form>
+    <div class="modal-action">
+      <button class="btn" (click)="closeCreateRoomModal()">Confirm</button>
+      <button class="btn btn-ghost" (click)="closeCreateRoomModal()">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- Create Room -->
+<div class="modal modal-bottom sm:modal-middle" [ngClass]="{'modal-open': editRoomModalState}">
+  <div class="modal-box">
+    <h3 class="font-bold text-lg">Create Room</h3>
+    <form>
+      <div class="mt-5">
+        <div class="form-control py-2 max-w-xs mx-auto">
+          <input type="text" class="input input-bordered" placeholder="Room Name" />
+        </div>
+      </div>
+    </form>
+    <div class="modal-action">
+      <button class="btn" (click)="closeEditRoomModal()">Confirm</button>
+      <button class="btn btn-ghost" (click)="closeEditRoomModal()">Close</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- Archive Room -->
+<div class="modal modal-bottom sm:modal-middle" [ngClass]="{'modal-open': archiveRoomModalState}">
+  <div class="modal-box">
+    <h3 class="font-bold text-lg">Delete Room</h3>
+    <p class="text-base mt-2">Are you sure you want to delete this room?</p>
+    <div class="modal-action">
+      <button class="btn" (click)="closeArchiveRoomModal()">Confirm</button>
+      <button class="btn btn-ghost" (click)="closeArchiveRoomModal()">Close</button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,132 @@
+<div class="h-full">
+  <div class="flex flex-row flex-wrap justify-between items-center">
+    <div class="tabs tabs-boxed bg-base-100">
+      <a class="tab" [ngClass]="{'tab-active': currentTab === 'am'}" (click)="setTab('am')">AM</a>
+      <a class="tab" [ngClass]="{'tab-active': currentTab === 'pm'}" (click)="setTab('pm')">PM</a>
+      <a class="tab" [ngClass]="{'tab-active': currentTab === 'active'}" (click)="setTab('active')">Active</a>
+    </div>
+  </div>
+
+  <ng-container *ngIf="currentTab === 'am'">
+    <div class="overflow-x-auto shadow-lg">
+      <table class="table table-normal w-full text-center">
+        <thead>
+          <tr>
+            <th>IT-B</th>
+            <th>Name</th>
+            <th>Schedule</th>
+            <th>Room</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr (click)="openAttendanceModal()">
+            <th></th>
+            <td>John Doe</td>
+            <td>7:00 AM - 8:00 AM</td>
+            <td>Room 101</td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <th></th>
+            <th>Name</th>
+            <th>Schedule</th>
+            <th>Room</th>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="currentTab === 'pm'">
+    <div class="overflow-x-auto shadow-lg">
+      <table class="table table-normal w-full text-center">
+        <thead>
+          <tr>
+            <th>IT-B</th>
+            <th>Name</th>
+            <th>Schedule</th>
+            <th>Room</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr (click)="openAttendanceModal()">
+            <th></th>
+            <td>John Doe</td>
+            <td>1:00 PM - 2:00 PM</td>
+            <td>Room 101</td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <th></th>
+            <th>Name</th>
+            <th>Schedule</th>
+            <th>Room</th>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="currentTab === 'active'">
+    <div class="overflow-x-auto shadow-lg">
+      <table class="table table-normal w-full text-center">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Name</th>
+            <th>Schedule</th>
+            <th>Room</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr (click)="openAttendanceModal()">
+            <th></th>
+            <td>John Doe</td>
+            <td>1:00 PM - 2:00 PM</td>
+            <td>Room 101</td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <th></th>
+            <th>Name</th>
+            <th>Schedule</th>
+            <th>Room</th>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </ng-container>
+</div>
+
+<div class="modal modal-bottom sm:modal-middle" [ngClass]="{'modal-open': attendanceModalState}">
+  <div class="modal-box">
+    <h3 class="font-bold text-lg">Attendance</h3>
+    <div class="flex flex-col justify-center">
+      <div class="flex flex-col gap-2">
+        <p class="text-lg font-bold">Name: John Doe</p>
+        <p class="text-lg font-bold">Room: Room 101</p>
+        <p class="text-lg font-bold">Status: Not Visited</p>
+      </div>
+      <div class="flex flex-row justify-center gap-8 mt-5">
+        <div
+          class="flex w-[200px] h-[200px] shadow-lg rounded-lg items-center justify-center border-2 border-neutral border-dashed bg-success text-success-content hover:bg-neutral hover:text-neutral-content">
+          <p class="text-lg">Present</p>
+        </div>
+        <div
+          class="flex w-[200px] h-[200px] shadow-lg rounded-lg items-center justify-center border-2 border-neutral border-dashed bg-error text-error-content hover:bg-neutral hover:text-neutral-content">
+          <p class="text-lg">Absent</p>
+        </div>
+      </div>
+      <div class="form-control py-2 w-full mx-auto mt-5">
+        <textarea class="textarea textarea-bordered" placeholder="Comment"></textarea>
+      </div>
+    </div>
+    <div class="modal-action">
+      <label class="btn" (click)="closeAttendanceModal()">Submit</label>
+      <label class="btn btn-ghost" (click)="closeAttendanceModal()">Close</label>
+    </div>
+  </div>
+</div>
