@@ -10,6 +10,7 @@ export interface User {
   last_name?: string;
   email?: string;
   role_type?: string;
+  is_deleted?: boolean;
 }
 
 export interface UserLogin {
@@ -30,6 +31,12 @@ export class AuthService {
   isAuthenticated$ = new BehaviorSubject<boolean>(false);
 
   constructor(private http: HttpClient) { }
+
+  getAuthStatus() {
+    return this.isAuthenticated$.asObservable().pipe(
+      shareReplay({ bufferSize: 1, refCount: true })
+    );
+  }
 
   login(user: UserLogin) {
     const headers = {
@@ -61,7 +68,7 @@ export class AuthService {
       'Accept': 'application/json',
       'Authorization': `Bearer ${localStorage.getItem('token')}`
     };
-    return this.http.get<UserResponse>(`${environment.apiUrl}/user`, { headers: headers }).pipe(
+    return this.http.get<UserResponse>(`${environment.apiUrl}/check-auth`, { headers: headers }).pipe(
       tap(
         res => {
           localStorage.setItem("user", JSON.stringify(res.user ?? {}));

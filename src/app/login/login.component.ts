@@ -13,6 +13,8 @@ import { Router } from '@angular/router';
   ]
 })
 export class LoginComponent implements OnInit {
+  auth$ = this.auth.getAuthStatus();
+
   form: any = {
     email: null,
     password: null
@@ -25,7 +27,7 @@ export class LoginComponent implements OnInit {
       password: ['', Validators.required]
     });
 
-    this.auth.isAuthenticated$.subscribe(
+    this.auth$.subscribe(
       data => {
         if (data) {
           this.router.navigate(['/']);

@@ -28,17 +28,17 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <th>1</th>
-            <td>John</td>
-            <td>Michael</td>
-            <td>Doe</td>
-            <td>johndoe@email.com</td>
-            <td>Admin</td>
+          <tr *ngFor="let user of allUsers$ | async">
+            <th>{{user.id}}</th>
+            <td>{{user.first_name}}</td>
+            <td>{{user.middle_name}}</td>
+            <td>{{user.last_name}}</td>
+            <td>{{user.email}}</td>
+            <td>{{user.role_type}}</td>
             <td class="space-x-2">
-              <button class="btn btn-sm" (click)="openEditUserModal()">Edit</button>
-              <button class="btn btn-sm" (click)="openArchiveUserModal()">Archive</button>
-              <button class="btn btn-sm" (click)="openResetPasswordUserModal()">Reset</button>
+              <button class="btn btn-sm" (click)="openEditUserModal(user?.id ?? -1)">Edit</button>
+              <button class="btn btn-sm" (click)="openArchiveUserModal(user?.id ?? -1)">Archive</button>
+              <button class="btn btn-sm" (click)="openResetPasswordUserModal(user?.id ?? -1)">Reset</button>
             </td>
           </tr>
         </tbody>
@@ -71,16 +71,16 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <th>1</th>
-            <td>John</td>
-            <td>Michael</td>
-            <td>Doe</td>
-            <td>johndoe@email.com</td>
+          <tr *ngFor="let user of facultyUsers$ | async">
+            <th>{{user.id}}</th>
+            <td>{{user.first_name}}</td>
+            <td>{{user.middle_name}}</td>
+            <td>{{user.last_name}}</td>
+            <td>{{user.email}}</td>
             <td class="space-x-2">
-              <button class="btn btn-sm" (click)="openEditUserModal()">Edit</button>
-              <button class="btn btn-sm" (click)="openArchiveUserModal()">Archive</button>
-              <button class="btn btn-sm" (click)="openResetPasswordUserModal()">Reset</button>
+              <button class="btn btn-sm" (click)="openEditUserModal(user?.id ?? -1)">Edit</button>
+              <button class="btn btn-sm" (click)="openArchiveUserModal(user?.id ?? -1)">Archive</button>
+              <button class="btn btn-sm" (click)="openResetPasswordUserModal(user?.id ?? -1)">Reset</button>
             </td>
           </tr>
         </tbody>
@@ -112,16 +112,16 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <th>1</th>
-            <td>John</td>
-            <td>Michael</td>
-            <td>Doe</td>
-            <td>johndoe@email.com</td>
+          <tr *ngFor="let user of attendanceCheckerUsers$ | async">
+            <th>{{user.id}}</th>
+            <td>{{user.first_name}}</td>
+            <td>{{user.middle_name}}</td>
+            <td>{{user.last_name}}</td>
+            <td>{{user.email}}</td>
             <td class="space-x-2">
-              <button class="btn btn-sm">Edit</button>
-              <button class="btn btn-sm">Archive</button>
-              <button class="btn btn-sm">Reset</button>
+              <button class="btn btn-sm" (click)="openEditUserModal(user?.id ?? -1)">Edit</button>
+              <button class="btn btn-sm" (click)="openArchiveUserModal(user?.id ?? -1)">Archive</button>
+              <button class="btn btn-sm" (click)="openResetPasswordUserModal(user?.id ?? -1)">Reset</button>
             </td>
           </tr>
         </tbody>
@@ -154,15 +154,15 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <th>1</th>
-            <td>John</td>
-            <td>Michael</td>
-            <td>Doe</td>
-            <td>johndoe@email.com</td>
-            <td>Admin</td>
+          <tr *ngFor="let user of archivedUsers$ | async">
+            <th>{{user.id}}</th>
+            <td>{{user.first_name}}</td>
+            <td>{{user.middle_name}}</td>
+            <td>{{user.last_name}}</td>
+            <td>{{user.email}}</td>
+            <td>{{user.role_type}}</td>
             <td class="space-x-2">
-              <button class="btn btn-sm" (click)="openRestoreUserModal()">Restore</button>
+              <button class="btn btn-sm" (click)="openRestoreUserModal(user?.id ?? -1)">Restore</button>
             </td>
           </tr>
         </tbody>
@@ -180,7 +180,6 @@
       </table>
     </div>
   </ng-container>
-
 </div>
 
 
@@ -188,31 +187,31 @@
 <div class="modal modal-bottom sm:modal-middle" [ngClass]="{'modal-open': createUserModalState}">
   <div class="modal-box">
     <h3 class="font-bold text-lg">Create User Account</h3>
-    <form>
+    <form [formGroup]="form">
       <div class="mt-5">
         <div class="form-control py-2 max-w-xs mx-auto">
-          <input type="text" class="input input-bordered" placeholder="First Name" />
+          <input type="text" class="input input-bordered" placeholder="First Name" formControlName="first_name" />
         </div>
         <div class="form-control py-2 max-w-xs mx-auto">
-          <input type="text" class="input input-bordered" placeholder="Middle Name" />
+          <input type="text" class="input input-bordered" placeholder="Middle Name" formControlName="middle_name" />
         </div>
         <div class="form-control py-2 max-w-xs mx-auto">
-          <input type="text" class="input input-bordered" placeholder="Last Name" />
+          <input type="text" class="input input-bordered" placeholder="Last Name" formControlName="last_name" />
         </div>
         <div class="form-control py-2 max-w-xs mx-auto">
-          <input type="text" class="input input-bordered" placeholder="Email" />
+          <input type="text" class="input input-bordered" placeholder="Email" formControlName="email" />
         </div>
         <div class="form-control py-2 max-w-xs mx-auto">
-          <select class="select select-bordered w-full">
+          <select class="select select-bordered w-full" formControlName="role_type">
             <option disabled selected>Select role</option>
-            <option>Attendance Checker</option>
-            <option>Faculty</option>
+            <option value="attendance_checker">Attendance Checker</option>
+            <option value="faculty">Faculty</option>
           </select>
         </div>
       </div>
     </form>
     <div class="modal-action">
-      <button class="btn" (click)="closeCreateUserModal()">Confirm</button>
+      <button class="btn" (click)="onSubmitCreateUserModal()">Confirm</button>
       <button class="btn btn-ghost" (click)="closeCreateUserModal()">Close</button>
     </div>
   </div>
@@ -222,31 +221,31 @@
 <div class="modal modal-bottom sm:modal-middle" [ngClass]="{'modal-open': edituserModalState}">
   <div class="modal-box">
     <h3 class="font-bold text-lg">Edit User Account</h3>
-    <form>
+    <form [formGroup]="form">
       <div class="mt-5">
         <div class="form-control py-2 max-w-xs mx-auto">
-          <input type="text" class="input input-bordered" placeholder="First Name" />
+          <input type="text" class="input input-bordered" placeholder="First Name" formControlName="first_name" />
         </div>
         <div class="form-control py-2 max-w-xs mx-auto">
-          <input type="text" class="input input-bordered" placeholder="Middle Name" />
+          <input type="text" class="input input-bordered" placeholder="Middle Name" formControlName="middle_name" />
         </div>
         <div class="form-control py-2 max-w-xs mx-auto">
-          <input type="text" class="input input-bordered" placeholder="Last Name" />
+          <input type="text" class="input input-bordered" placeholder="Last Name" formControlName="last_name" />
         </div>
         <div class="form-control py-2 max-w-xs mx-auto">
-          <input type="text" class="input input-bordered" placeholder="Email" />
+          <input type="text" class="input input-bordered" placeholder="Email" formControlName="email" />
         </div>
         <div class="form-control py-2 max-w-xs mx-auto">
-          <select class="select select-bordered w-full">
+          <select class="select select-bordered w-full" formControlName="role_type">
             <option disabled selected>Select role</option>
-            <option>Attendance Checker</option>
-            <option>Faculty</option>
+            <option value="attendance_checker">Attendance Checker</option>
+            <option value="faculty">Faculty</option>
           </select>
         </div>
       </div>
     </form>
     <div class="modal-action">
-      <button class="btn" (click)="closeEditUserModal()">Confirm</button>
+      <button class="btn" (click)="onSubmitEditUserModal()">Confirm</button>
       <button class="btn btn-ghost" (click)="closeEditUserModal()">Close</button>
     </div>
   </div>
@@ -258,7 +257,7 @@
     <h3 class="font-bold text-lg">Archive User Account</h3>
     <p class="text-base mt-2">Are you sure you want to archive this account?</p>
     <div class="modal-action">
-      <button class="btn" (click)="closeArchiveUserModal()">Confirm</button>
+      <button class="btn" (click)="onSubmitArchiveUserModal()">Confirm</button>
       <button class="btn btn-ghost" (click)="closeArchiveUserModal()">Close</button>
     </div>
   </div>
@@ -270,7 +269,7 @@
     <h3 class="font-bold text-lg">Reset User Password</h3>
     <p class="text-base mt-2">Are you sure you want to reset the password of this account?</p>
     <div class="modal-action">
-      <button class="btn" (click)="closeResetPasswordUserModal()">Confirm</button>
+      <button class="btn" (click)="onSubmitResetPasswordUserModal()">Confirm</button>
       <button class="btn btn-ghost" (click)="closeResetPasswordUserModal()">Close</button>
     </div>
   </div>
@@ -282,7 +281,7 @@
     <h3 class="font-bold text-lg">Restore User</h3>
     <p class="text-base mt-2">Are you sure you want to restore this account?</p>
     <div class="modal-action">
-      <button class="btn" (click)="closeRestoreUserModal()">Confirm</button>
+      <button class="btn" (click)="onSubmitRestoreUserModal()">Confirm</button>
       <button class="btn btn-ghost" (click)="closeRestoreUserModal()">Close</button>
     </div>
   </div>
