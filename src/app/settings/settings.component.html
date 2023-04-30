@@ -38,7 +38,7 @@
             <td>{{section.name}}</td>
             <td class="space-x-2">
               <button class="btn btn-sm" (click)="openEditSectionModal(section?.id ?? -1)">Edit</button>
-              <button class="btn btn-sm" (click)="openArchiveSectionModal(section?.id ?? -1)">Archive</button>
+              <button class="btn btn-sm" (click)="openArchiveSectionModal(section?.id ?? -1)">Delete</button>
             </td>
           </tr>
         </tbody>
@@ -71,7 +71,7 @@
             <td>{{subject.name}}</td>
             <td class="space-x-2">
               <button class="btn btn-sm" (click)="openEditSubjectModal(subject?.id ?? -1)">Edit</button>
-              <button class="btn btn-sm" (click)="openArchiveSubjectModal(subject?.id ?? -1)">Archive</button>
+              <button class="btn btn-sm" (click)="openArchiveSubjectModal(subject?.id ?? -1)">Delete</button>
             </td>
           </tr>
         </tbody>
@@ -103,7 +103,7 @@
             <td>{{room.room_name}}</td>
             <td class="space-x-2">
               <button class="btn btn-sm" (click)="openEditRoomModal(room?.id ?? -1)">Edit</button>
-              <button class="btn btn-sm" (click)="openArchiveRoomModal(room?.id ?? -1)">Archive</button>
+              <button class="btn btn-sm" (click)="openArchiveRoomModal(room?.id ?? -1)">Delete</button>
             </td>
           </tr>
         </tbody>

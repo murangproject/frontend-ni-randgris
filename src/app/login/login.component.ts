@@ -30,7 +30,12 @@ export class LoginComponent implements OnInit {
     this.auth$.subscribe(
       data => {
         if (data) {
-          this.router.navigate(['/']);
+          const init = JSON.parse(localStorage.getItem('initialize') || 'false');
+          if(init) {
+            this.router.navigate(['/init']);
+          } else {
+            this.router.navigate(['/']);
+          }
         }
       }
     );

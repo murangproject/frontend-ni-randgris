@@ -54,7 +54,7 @@ export class SchedulesService {
       'Authorization': `Bearer ${localStorage.getItem('token')}`
     }
 
-    return this.http.post(`${environment.apiUrl}/schedules`, {...schedule, user_id}, { headers: headers }).pipe(
+    return this.http.post(`${environment.apiUrl}/schedules`, { ...schedule, user_id }, { headers: headers }).pipe(
       shareReplay({ bufferSize: 1, refCount: true })
     );
   }
@@ -67,6 +67,18 @@ export class SchedulesService {
     }
 
     return this.http.put(`${environment.apiUrl}/schedules/${schedule_id}`, schedule, { headers: headers }).pipe(
+      shareReplay({ bufferSize: 1, refCount: true })
+    );
+  }
+
+  updateScheduleStatus(schedule_id: number, schedule: UpdateScheduleDto) {
+    const headers = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': `Bearer ${localStorage.getItem('token')}`
+    }
+
+    return this.http.put(`${environment.apiUrl}/schedules/${schedule_id}/status`, schedule, { headers: headers }).pipe(
       shareReplay({ bufferSize: 1, refCount: true })
     );
   }

@@ -35,6 +35,7 @@ export interface UpdateSubjectDto extends Partial<CreateSubjectDto> {
 
 export interface Room {
   id?: number;
+  borrower?: number;
   room_name?: string;
   borrow_time?: string;
   return_time?: string;
@@ -224,4 +225,29 @@ export class SettingsService {
       shareReplay({ bufferSize: 1, refCount: true })
     );
   }
+
+  borrowRoom(id: number) {
+    const headers = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': `Bearer ${localStorage.getItem('token')}`,
+    };
+
+    return this.http.post(`${environment.apiUrl}/rooms/${id}/borrow`, {}, { headers: headers }).pipe(
+      shareReplay({ bufferSize: 1, refCount: true })
+    );
+  }
+
+  returnRoom(id: number) {
+    const headers = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': `Bearer ${localStorage.getItem('token')}`,
+    };
+
+    return this.http.post(`${environment.apiUrl}/rooms/${id}/return`, {}, { headers: headers }).pipe(
+      shareReplay({ bufferSize: 1, refCount: true })
+    );
+  }
 }
+

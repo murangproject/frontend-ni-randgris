@@ -6,6 +6,7 @@ import { map, tap } from 'rxjs';
 import { Schedule, User } from '../shared/auth.service';
 import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, Validators } from '@angular/forms';
 import { SchedulesService } from './schedules.service';
+import { SettingsService } from '../settings/settings.service';
 
 @Component({
   selector: 'app-faculty-schedules',
@@ -25,6 +26,18 @@ export class FacultySchedulesComponent implements OnInit {
   filteredSchedules$ = this.schedules$.pipe(
     map((schedules: Schedule[]) => schedules?.filter((schedule: Schedule) => !schedule.is_deleted)),
     map((schedules: Schedule[]) => schedules?.filter((schedule: Schedule) => schedule.semester?.includes(this.filteredSemester)))
+  );
+
+  sections$ = this.settings.getSections().pipe(
+    map(sections => sections.filter(section => !section.is_deleted))
+  );
+
+  subjects$ = this.settings.getSubjects().pipe(
+    map(subjects => subjects.filter(subject => !subject.is_deleted))
+  );
+
+  rooms$ = this.settings.getRooms().pipe(
+    map(rooms => rooms.filter(room => !room.is_deleted))
   );
 
   // Modal States
@@ -47,7 +60,7 @@ export class FacultySchedulesComponent implements OnInit {
     subject: '',
     room: '',
   }
-  constructor(private activatedRoute: ActivatedRoute, private formBulder: UntypedFormBuilder, private schedule: SchedulesService) { }
+  constructor(private activatedRoute: ActivatedRoute, private formBulder: UntypedFormBuilder, private schedule: SchedulesService, private settings: SettingsService) { }
 
   ngOnInit(): void {
     this.activatedRoute.params.subscribe(params => {
@@ -65,6 +78,9 @@ export class FacultySchedulesComponent implements OnInit {
     });
 
     this.schedule.init();
+    this.settings.initSections();
+    this.settings.initSubjects();
+    this.settings.initRooms();
   }
 
   // Modal Functions
@@ -76,15 +92,15 @@ export class FacultySchedulesComponent implements OnInit {
 
   closeCreateScheduleModal() {
     this.createScheduleModalState = false;
+    this.form.reset();
   }
 
   onSubmitCreateSchedule() {
     if (this.form.invalid) return;
 
     this.schedule.createSchedule(this.id, this.form.value).subscribe((response: any) => {
-      this.closeCreateScheduleModal();
-      this.form.reset();
       this.schedule.init();
+      this.closeCreateScheduleModal();
     });
   }
 

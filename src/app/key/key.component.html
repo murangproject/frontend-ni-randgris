@@ -1,6 +1,6 @@
 <div
   (click)="onClick()"
-  class="flex flex-col w-[100px] h-[100px] shadow-lg rounded-lg items-center justify-center border border-base-content border-dashed gap-2 hover:bg-neutral-focus hover:text-neutral-content hover:scale-105"
+  class="flex flex-col w-[150px] h-[150px] shadow-lg rounded-lg items-center justify-center border border-base-content border-dashed gap-2 hover:bg-neutral-focus hover:text-neutral-content hover:scale-105 p-5"
   [ngClass]="{'bg-error text-error-content': status === 'borrowed', 'bg-success text-success-content': status ==='available'}">
   <div class="flex">
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.0" stroke="currentColor"
@@ -10,6 +10,6 @@
     </svg>
   </div>
   <div class="flex">
-    <p class="font-bold text-xs">{{ room }}</p>
+    <p class="font-bold text-xs line-clamp-2 break-all">{{ room }}</p>
   </div>
 </div>

@@ -1,29 +1,57 @@
 <div class="flex h-full w-full flex-col p-4">
   <div class="flex">
-    <p class="text-lg font-bold">Room Keys</p>
+    <p class="text-xl font-bold mx-auto">Room Keys</p>
   </div>
-  <div class="flex flex-row flex-wrap gap-2 mt-4">
-    <app-key (handleClick)="openRoomKeyModal()" />
+  <div class="flex flex-row flex-wrap gap-2 mt-4 justify-center">
+    <app-key *ngFor="let room of rooms$ | async" [roomStatus]="getStatus(room?.status ?? '')" [roomId]="room?.id ?? -1"
+      [roomName]="room?.room_name ?? ''" (handleClick)="openModal(room)" />
   </div>
 </div>
 
 <div class="modal modal-bottom sm:modal-middle" [ngClass]="{'modal-open': roomKeyModalState}">
   <div class="modal-box">
-    <h3 class="font-bold text-lg">Room Key</h3>
+    <h3 class="font-bold text-lg">Room Details</h3>
     <div class="flex flex-col justify-center">
       <div class="flex flex-col gap-2">
-        <p class="text-lg font-bold">Room Name: Lab 1</p>
-        <p class="text-lg font-bold">Current Scheduled: John Doe</p>
-        <p class="text-lg font-bold">Borrow Time: ~</p>
-        <p class="text-lg font-bold">Return Time: ~</p>
+        <p class="text-base font-normal">Room: {{selectedRoomName}}</p>
+        <ng-container *ngIf="selectedSchedule$ | async as selected; else none">
+          <p class="text-base font-normal">Scheduled Faculty: {{selected.user?.first_name}} {{selected.user?.last_name}}
+          </p>
+        </ng-container>
+        <ng-template #none>
+          <p class="text-base font-normal">Scheduled Faculty: None</p>
+        </ng-template>
       </div>
-      <div
-        class="flex w-[200px] h-[200px] shadow-lg rounded-lg items-center justify-center border-2 border-neutral border-dashed bg-success text-success-content hover:bg-neutral hover:text-neutral-content mx-auto mt-5">
-        <p class="text-lg">Borrow</p>
-      </div>
+      <ng-container *ngIf="selectedRoom$ | async as selected">
+        <div
+          class="flex w-[200px] h-[200px] shadow-lg rounded-lg items-center justify-center border-2 border-neutral border-dashed hover:bg-neutral-focus hover:text-neutral-content mx-auto mt-5"
+          (click)="selected?.status === 'available' ? borrow() : returnRoom()"
+          [ngClass]="{'bg-success text-success-content' : selected?.status ==='available', 'bg-error text-error-content' : selected?.status === 'occupied'}">
+          <p class="text-lg">{{ selected?.status === 'available' ? 'Borrow' : 'Return'}}</p>
+        </div>
+      </ng-container>
     </div>
     <div class="modal-action">
       <label class="btn btn-ghost" (click)="closeRoomKeyModal()">Close</label>
+      <label class="btn btn-ghost" (click)="openRoomActivitiesModal()">Open Logs</label>
+    </div>
+  </div>
+</div>
+
+<div class="modal modal-bottom sm:modal-middle" [ngClass]="{'modal-open': roomActivitiesModalState}">
+  <div class="modal-box">
+    <h3 class="font-bold text-lg">Room Activity Log</h3>
+    <div class="flex flex-col gap-2 overflow-y-auto max-h-[500px]">
+      <ng-container *ngFor="let activity of selectedActivities$ | async">
+        <div class="flex flex-col mb-5 gap-2">
+        <p class="font-bold">Borrower: {{(getUser(activity.borrower ?? -1) | async)?.first_name ?? ''}} {{(getUser(activity.borrower ?? -1) | async)?.last_name ?? ''}}</p>
+        <p>Borrow Time: {{activity.borrow_time}}</p>
+        <p>Return Time: {{activity.return_time}}</p>
+        </div>
+      </ng-container>
+    </div>
+    <div class="modal-action">
+      <label class="btn" (click)="closeRoomActivitiesModal()">Close</label>
     </div>
   </div>
 </div>

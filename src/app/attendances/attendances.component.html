@@ -1,4 +1,12 @@
 <div class="h-full">
+  <div class="form-control py-2 max-w-xs mx-auto">
+    <select class="select select-bordered w-full" (change)="setFilteredSemester(filter.value)" #filter>
+      <option disabled selected>Select Semester</option>
+      <option value="">All</option>
+      <option value="1st semester">1st Semester</option>
+      <option value="2nd semester">2nd Semester</option>
+    </select>
+  </div>
   <div class="flex flex-row flex-wrap justify-between items-center">
     <div class="tabs tabs-boxed bg-base-100">
       <a class="tab" [ngClass]="{'tab-active': currentTab === 'am'}" (click)="setTab('am')">AM</a>
@@ -9,29 +17,33 @@
 
   <ng-container *ngIf="currentTab === 'am'">
     <div class="overflow-x-auto shadow-lg">
-      <table class="table table-normal w-full text-center">
+      <table class="table table-compact  w-full text-center">
         <thead>
           <tr>
-            <th>IT-B</th>
+            <th>Section</th>
+            <th>Semester</th>
             <th>Name</th>
             <th>Schedule</th>
-            <th>Room</th>
+            <th>Status</th>
           </tr>
         </thead>
         <tbody>
-          <tr (click)="openAttendanceModal()">
-            <th></th>
-            <td>John Doe</td>
-            <td>7:00 AM - 8:00 AM</td>
-            <td>Room 101</td>
+          <tr *ngFor="let schedule of amSchedules$ | async" (click)="openAttendanceModal(schedule?.id ?? -1)">
+            <th>{{schedule.section}}</th>
+            <td>{{schedule.semester}}</td>
+            <td>{{schedule.user?.first_name}} {{schedule.user?.last_name}}</td>
+            <td>{{schedule.start_time}} - {{schedule.end_time}}</td>
+            <td [ngClass]="{'bg-error': schedule.status ==='absent', 'bg-success': schedule.status === 'present'}">
+              {{getStatus(schedule.status ?? '')}}</td>
           </tr>
         </tbody>
         <tfoot>
           <tr>
-            <th></th>
+            <th>section</th>
+            <th>Semester</th>
             <th>Name</th>
             <th>Schedule</th>
-            <th>Room</th>
+            <th>Status</th>
           </tr>
         </tfoot>
       </table>
@@ -40,29 +52,30 @@
 
   <ng-container *ngIf="currentTab === 'pm'">
     <div class="overflow-x-auto shadow-lg">
-      <table class="table table-normal w-full text-center">
+      <table class="table table-compact w-full text-center">
         <thead>
           <tr>
-            <th>IT-B</th>
+            <th>Section</th>
             <th>Name</th>
             <th>Schedule</th>
-            <th>Room</th>
+            <th>Status</th>
           </tr>
         </thead>
         <tbody>
-          <tr (click)="openAttendanceModal()">
-            <th></th>
-            <td>John Doe</td>
-            <td>1:00 PM - 2:00 PM</td>
-            <td>Room 101</td>
+          <tr *ngFor="let schedule of pmSchedules$ | async" (click)="openAttendanceModal(schedule?.id ?? -1)">
+            <th>{{schedule.section}}</th>
+            <td>{{schedule.user?.first_name}} {{schedule.user?.last_name}}</td>
+            <td>{{schedule.start_time}} - {{schedule.end_time}}</td>
+            <td [ngClass]="{'bg-error': schedule.status ==='absent', 'bg-success': schedule.status === 'present'}">
+              {{getStatus(schedule.status ?? '')}}</td>
           </tr>
         </tbody>
         <tfoot>
           <tr>
-            <th></th>
+            <th>Section</th>
             <th>Name</th>
             <th>Schedule</th>
-            <th>Room</th>
+            <th>Status</th>
           </tr>
         </tfoot>
       </table>
@@ -71,29 +84,30 @@
 
   <ng-container *ngIf="currentTab === 'active'">
     <div class="overflow-x-auto shadow-lg">
-      <table class="table table-normal w-full text-center">
+      <table class="table table-compact w-full text-center">
         <thead>
           <tr>
-            <th></th>
+            <th>Section</th>
             <th>Name</th>
             <th>Schedule</th>
-            <th>Room</th>
+            <th>status</th>
           </tr>
         </thead>
         <tbody>
-          <tr (click)="openAttendanceModal()">
-            <th></th>
-            <td>John Doe</td>
-            <td>1:00 PM - 2:00 PM</td>
-            <td>Room 101</td>
+          <tr *ngFor="let schedule of activeSchedules$ | async" (click)="openAttendanceModal(schedule?.id ?? -1)">
+            <th>{{schedule.section}}</th>
+            <td>{{schedule.user?.first_name}} {{schedule.user?.last_name}}</td>
+            <td>{{schedule.start_time}} - {{schedule.end_time}}</td>
+            <td [ngClass]="{'bg-error': schedule.status ==='absent', 'bg-success': schedule.status === 'present'}">
+              {{getStatus(schedule.status ?? '')}}</td>
           </tr>
         </tbody>
         <tfoot>
           <tr>
-            <th></th>
+            <th>Section</th>
             <th>Name</th>
             <th>Schedule</th>
-            <th>Room</th>
+            <th>Status</th>
           </tr>
         </tfoot>
       </table>
@@ -105,27 +119,33 @@
   <div class="modal-box">
     <h3 class="font-bold text-lg">Attendance</h3>
     <div class="flex flex-col justify-center">
-      <div class="flex flex-col gap-2">
-        <p class="text-lg font-bold">Name: John Doe</p>
-        <p class="text-lg font-bold">Room: Room 101</p>
-        <p class="text-lg font-bold">Status: Not Visited</p>
-      </div>
+      <ng-container *ngIf="selectedSchedule$ | async as selected">
+        <div class="flex flex-col gap-2">
+          <p class="text-base">Name: {{selected.user?.first_name}} {{selected.user?.last_name}}</p>
+          <p class="text-base">Room: {{ selected.room }}</p>
+          <p class="text-base">Status: {{ getStatus(selected.status ?? '') }}</p>
+        </div>
+      </ng-container>
       <div class="flex flex-row justify-center gap-8 mt-5">
         <div
-          class="flex w-[200px] h-[200px] shadow-lg rounded-lg items-center justify-center border-2 border-neutral border-dashed bg-success text-success-content hover:bg-neutral hover:text-neutral-content">
+          class="flex w-[200px] h-[200px] shadow-lg rounded-lg items-center justify-center border-2 border-neutral border-dashed bg-success text-success-content hover:bg-neutral hover:text-neutral-content"
+          (click)="onClickPresent()">
           <p class="text-lg">Present</p>
         </div>
         <div
-          class="flex w-[200px] h-[200px] shadow-lg rounded-lg items-center justify-center border-2 border-neutral border-dashed bg-error text-error-content hover:bg-neutral hover:text-neutral-content">
+          class="flex w-[200px] h-[200px] shadow-lg rounded-lg items-center justify-center border-2 border-neutral border-dashed bg-error text-error-content hover:bg-neutral hover:text-neutral-content"
+          (click)="onClickAbsent()">
           <p class="text-lg">Absent</p>
         </div>
       </div>
-      <div class="form-control py-2 w-full mx-auto mt-5">
-        <textarea class="textarea textarea-bordered" placeholder="Comment"></textarea>
-      </div>
+      <form [formGroup]="attendanceForm">
+        <div class="form-control py-2 w-full mx-auto mt-5">
+          <textarea class="textarea textarea-bordered" placeholder="Comment" formControlName="comment"></textarea>
+        </div>
+      </form>
     </div>
     <div class="modal-action">
-      <label class="btn" (click)="closeAttendanceModal()">Submit</label>
+      <label class="btn" (click)="onSubmitAttendanceModal()">Submit</label>
       <label class="btn btn-ghost" (click)="closeAttendanceModal()">Close</label>
     </div>
   </div>

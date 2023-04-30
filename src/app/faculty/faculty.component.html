@@ -18,8 +18,9 @@
           <td>{{faculty.middle_name}}</td>
           <td>{{faculty.last_name}}</td>
           <td>{{faculty.email}}</td>
-          <td>
+          <td class="space-x-2">
             <a [routerLink]="getLink(faculty?.id ?? -1)"  class="btn btn-sm">View Schedules</a>
+            <a [routerLink]="getLinkAttendance(faculty?.id ?? -1)"  class="btn btn-sm">View Attendance</a>
           </td>
         </tr>
       </tbody>

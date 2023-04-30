@@ -11,18 +11,19 @@ import { RoomStatus } from './key.model';
   ]
 })
 export class KeyComponent implements OnInit{
-  @Output() handleClick = new EventEmitter<string>();
-  @Input() statusInput: RoomStatus = RoomStatus.AVAILABLE;
-  @Input() roomId: string = '';
+  @Output() handleClick = new EventEmitter<number>();
+  @Input() roomStatus: RoomStatus = RoomStatus.BORROWED;
+  @Input() roomId: number = -1;
   @Input() roomName: string = '';
+
   status: RoomStatus = RoomStatus.AVAILABLE;
-  id: string = '';
+  id: number = -1;
   room: string = '';
 
   constructor() { }
 
   ngOnInit(): void {
-    this.status = this.statusInput;
+    this.status = this.roomStatus;
     this.room = this.roomName;
     this.id = this.roomId;
   }

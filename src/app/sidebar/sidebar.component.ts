@@ -12,7 +12,10 @@ import { RouterModule } from '@angular/router';
   ]
 })
 export class SidebarComponent {
-  navBarItems = Navbar;
+  navBarItems: any;
 
-  constructor() { }
+  constructor() {
+    const role = localStorage.getItem('role');
+    this.navBarItems = Navbar[role as keyof typeof Navbar];
+  }
 }

@@ -33,4 +33,8 @@ export class FacultyComponent implements OnInit {
   getLink(id: number) {
     return `/faculties/${id}`;
   }
+
+  getLinkAttendance(id: number) {
+    return `/faculties/${id}/attendance`;
+  }
 }

@@ -27,7 +27,9 @@ export interface Schedule {
   status?: 'present' | 'absent' | 'not_visited';
   comment?: string;
   is_deleted?: boolean;
+  updated_at?: string;
   user_id?: number;
+  user?: User;
 }
 
 export interface UserLogin {
@@ -65,6 +67,8 @@ export class AuthService {
         res => {
           localStorage.setItem("token", res?.token ?? '');
           localStorage.setItem("user", JSON.stringify(res.user ?? {}));
+          localStorage.setItem("role", res.user?.role_type ?? '');
+          localStorage.setItem("initialize", JSON.stringify(res.initialize ?? false));
           this.isAuthenticated$.next(true);
         }
       ),
@@ -90,6 +94,23 @@ export class AuthService {
         res => {
           localStorage.setItem("user", JSON.stringify(res.user ?? {}));
           this.isAuthenticated$.next(true);
+        }
+      ),
+      shareReplay({ bufferSize: 1, refCount: true })
+    );
+  }
+
+  initialize(password: string, password_confirmation: string) {
+    const headers = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': `Bearer ${localStorage.getItem('token')}`
+    };
+
+    return this.http.post(`${environment.apiUrl}/change-password`, { password, password_confirmation }, { headers: headers }).pipe(
+      tap(
+        res => {
+          localStorage.removeItem('initialize');
         }
       ),
       shareReplay({ bufferSize: 1, refCount: true })

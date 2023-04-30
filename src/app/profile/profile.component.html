@@ -1,0 +1,37 @@
+<div class="h-full">
+  <div class="overflow-x-auto">
+    <table class="table table-compact w-full">
+      <thead>
+        <tr>
+          <th></th>
+          <th>Date</th>
+          <th>Schedule Time</th>
+          <th>Subject</th>
+          <th>Room</th>
+          <th>Status</th>
+          <th>Comment</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let activity of activities$ | async">
+          <th>{{activity.id}}</th>
+          <td>{{activity.updated_at}}</td>
+          <td>{{activity.start_time}} - {{activity.end_time}}</td>
+          <td>{{activity.subject}}</td>
+          <td>{{activity.room}}</td>
+          <td>{{activity.status}}</td>
+          <td>{{activity.comment}}</td>
+        </tr>
+      </tbody>
+      <tfoot>
+          <th></th>
+          <th>Date</th>
+          <th>Schedule Time</th>
+          <th>Subject</th>
+          <th>Room</th>
+          <th>Status</th>
+          <th>Comment</th>
+      </tfoot>
+    </table>
+  </div>
+</div>
