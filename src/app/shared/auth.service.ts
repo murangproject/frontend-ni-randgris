@@ -58,14 +58,9 @@ export class AuthService {
   }
 
   login(user: UserLogin) {
-    const headers = {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json'
-    }
-
     this.http.get(`${environment.baseUrl}/sanctum/csrf-cookie`).subscribe();
 
-    return this.http.post<UserResponse>(`${environment.apiUrl}/login`, user, { headers: headers }).pipe(
+    return this.http.post<UserResponse>(`${environment.apiUrl}/login`, user).pipe(
       tap(
         res => {
           localStorage.setItem("token", res?.token ?? '');
@@ -88,8 +83,6 @@ export class AuthService {
 
   checkAuthentication() {
     const headers = {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
       'Authorization': `Bearer ${localStorage.getItem('token')}`
     };
     return this.http.get<UserResponse>(`${environment.apiUrl}/check-auth`, { headers: headers }).pipe(
@@ -105,8 +98,6 @@ export class AuthService {
 
   initialize(password: string, password_confirmation: string) {
     const headers = {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
       'Authorization': `Bearer ${localStorage.getItem('token')}`
     };
 
