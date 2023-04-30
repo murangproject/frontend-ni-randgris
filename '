@@ -16,15 +16,14 @@ import { SchedulesService } from './schedules.service';
   ]
 })
 export class FacultySchedulesComponent implements OnInit {
+  users$ = this.user.getUsers();
 
-  schedules$ = this.schedule.getSchedules().pipe(
-    map(schedules => schedules.filter(schedule => !schedule.is_deleted)),
-    map(schedules => schedules.filter((schedule: Schedule) => schedule.user_id === this.id)),
+  schedules$ = this.users$.pipe(
+    tap(schedules => console.log(schedules))
   );
 
   filteredSchedules$ = this.schedules$.pipe(
-    map((schedules: Schedule[]) => schedules?.filter((schedule: Schedule) => !schedule.is_deleted)),
-    map((schedules: Schedule[]) => schedules?.filter((schedule: Schedule) => schedule.semester?.includes(this.filteredSemester)))
+    map((schedules: Schedule[]) => schedules?.filter((schedule: Schedule) => !schedule.is_deleted))
   );
 
   // Modal States
@@ -36,8 +35,6 @@ export class FacultySchedulesComponent implements OnInit {
   id: number = -1;
   selectedScheduleId: number = -1;
 
-  filteredSemester: string = '';
-
   form: any = {
     day: '',
     start_time: '',
@@ -47,11 +44,11 @@ export class FacultySchedulesComponent implements OnInit {
     subject: '',
     room: '',
   }
-  constructor(private activatedRoute: ActivatedRoute, private formBulder: UntypedFormBuilder, private schedule: SchedulesService) { }
+  constructor(private user: UsersService, private activatedRoute: ActivatedRoute, private formBulder: UntypedFormBuilder, private schedule: SchedulesService) { }
 
   ngOnInit(): void {
     this.activatedRoute.params.subscribe(params => {
-      this.id = parseInt(params['id']);
+      this.id = params['id'];
     });
 
     this.form = this.formBulder.group({
@@ -64,7 +61,8 @@ export class FacultySchedulesComponent implements OnInit {
       room: ['', [Validators.required]],
     });
 
-    this.schedule.init();
+    this.user.init();
+    this.user.init();
   }
 
   // Modal Functions
@@ -84,7 +82,7 @@ export class FacultySchedulesComponent implements OnInit {
     this.schedule.createSchedule(this.id, this.form.value).subscribe((response: any) => {
       this.closeCreateScheduleModal();
       this.form.reset();
-      this.schedule.init();
+      this.user.init();
     });
   }
 
@@ -92,27 +90,11 @@ export class FacultySchedulesComponent implements OnInit {
   openEditScheduleModal(scheduleId: number) {
     this.selectedScheduleId = scheduleId;
     this.editScheduleModalState = true;
-
-    this.filteredSchedules$.subscribe((schedules: Schedule[]) => {
-      this.form.patchValue(schedules.find((schedule: Schedule) => schedule.id === scheduleId));
-      console.log(this.form.value);
-    });
   }
 
   closeEditScheduleModal() {
     this.selectedScheduleId = -1;
     this.editScheduleModalState = false;
-    this.form.reset();
-  }
-
-  onSubmitEditSchedule() {
-    if (this.form.invalid) return;
-
-    this.schedule.updateSchedule(this.selectedScheduleId, this.form.value).subscribe((response: any) => {
-      this.closeEditScheduleModal();
-      this.form.reset();
-      this.schedule.init();
-    });
   }
 
   // Archive
@@ -126,15 +108,7 @@ export class FacultySchedulesComponent implements OnInit {
     this.archiveScheduleModalState = false;
   }
 
-  onSubmitArchiveSchedule() {
-    this.schedule.archiveSchedule(this.selectedScheduleId).subscribe((response: any) => {
-      this.closeArchiveScheduleModal();
-      this.schedule.init();
-    });
-  }
-
-  setFilteredSemester(semester: string) {
-    this.filteredSemester = semester;
-    this.schedule.init();
+  print(event: any) {
+    console.log(event.target.valueAsDate);
   }
 }

@@ -12,14 +12,14 @@
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <th>1</th>
-          <td>Cy Ganderton</td>
-          <td>Quality Control Specialist</td>
-          <td>Littel, Schaden and Vandervort</td>
-          <td>Canada</td>
+        <tr *ngFor="let faculty of facultyUsers$ | async">
+          <th>{{faculty.id}}</th>
+          <td>{{faculty.first_name}}</td>
+          <td>{{faculty.middle_name}}</td>
+          <td>{{faculty.last_name}}</td>
+          <td>{{faculty.email}}</td>
           <td>
-            <a [routerLink]="'/faculties/1'"  class="btn btn-sm">View Schedules</a>
+            <a [routerLink]="getLink(faculty?.id ?? -1)"  class="btn btn-sm">View Schedules</a>
           </td>
         </tr>
       </tbody>

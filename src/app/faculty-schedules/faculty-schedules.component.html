@@ -1,12 +1,12 @@
 <div class="h-full">
   <a [routerLink]="'/faculties'" class="btn btn-ghost btn-sm">Back</a>
   <div class="form-control py-2 max-w-xs mx-auto">
-    <select class="select select-bordered w-full">
+    <select class="select select-bordered w-full" (change)="setFilteredSemester(filter.value)" #filter>
       <option disabled selected>Select Semester</option>
-      <option value="0">All</option>
-      <option value="1">1st Semester</option>
-      <option value="2">2nd Semester</option>
-      <option value="3">3rd Semester</option>
+      <option value="">All</option>
+      <option value="1st semester">1st Semester</option>
+      <option value="2nd semester">2nd Semester</option>
+      <option value="3rd semester">3rd Semester</option>
     </select>
   </div>
   <div class="flex flex-row items-center justify-between">
@@ -19,7 +19,7 @@
         <tr>
           <th></th>
           <th>Semester</th>
-          <th>Date</th>
+          <th>Day</th>
           <th>Start Time</th>
           <th>End Time</th>
           <th>Section</th>
@@ -29,18 +29,18 @@
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <th>1</th>
-          <td>1st Semester</td>
-          <td>April 23, 2023</td>
-          <td>7:00 AM</td>
-          <td>8:00 AM</td>
-          <td>IT-C</td>
-          <td>CP101</td>
-          <td>LAB101</td>
+        <tr *ngFor="let schedule of filteredSchedules$ | async">
+          <th>{{schedule.id}}</th>
+          <td>{{schedule.semester}}</td>
+          <td>{{schedule.day}}</td>
+          <td>{{schedule.start_time}}</td>
+          <td>{{schedule.end_time}}</td>
+          <td>{{schedule.section}}</td>
+          <td>{{schedule.subject}}</td>
+          <td>{{schedule.room}}</td>
           <td class="space-x-2">
-            <button class="btn btn-sm" (click)="openEditScheduleModal()">Edit</button>
-            <button class="btn btn-sm" (click)="openArchiveScheduleModal()">Delete</button>
+            <button class="btn btn-sm" (click)="openEditScheduleModal(schedule?.id ?? -1)">Edit</button>
+            <button class="btn btn-sm" (click)="openArchiveScheduleModal(schedule?.id ?? -1)">Delete</button>
           </td>
         </tr>
       </tbody>
@@ -65,10 +65,10 @@
 <div class="modal modal-bottom sm:modal-middle" [ngClass]="{'modal-open': createScheduleModalState}">
   <div class="modal-box">
     <h3 class="font-bold text-lg">Create Schedule</h3>
-    <form>
+    <form [formGroup]="form">
       <div class="mt-5">
         <div class="form-control py-2 max-w-xs mx-auto">
-          <select class="select select-bordered w-full">
+          <select class="select select-bordered w-full" formControlName="day">
             <option disabled selected>Select Day</option>
             <option value="sunday">Sunday</option>
             <option value="monday">Monday</option>
@@ -80,35 +80,35 @@
           </select>
         </div>
         <div class="form-control py-2 max-w-xs mx-auto">
-          <input type="time" class="input input-bordered" placeholder="Start Time" />
+          <input type="time" class="input input-bordered" placeholder="Start Time" formControlName="start_time" />
         </div>
         <div class="form-control py-2 max-w-xs mx-auto">
-          <input type="time" class="input input-bordered" placeholder="End Time" />
+          <input type="time" class="input input-bordered" placeholder="End Time" formControlName="end_time" />
         </div>
         <div class="form-control py-2 max-w-xs mx-auto">
-          <select class="select select-bordered w-full">
+          <select class="select select-bordered w-full" formControlName="semester">
             <option disabled selected>Select Semester</option>
-            <option value="1">1st Semester</option>
-            <option value="2">2nd Semester</option>
-            <option value="3">3rd Semester</option>
+            <option value="1st semester">1st Semester</option>
+            <option value="2nd semester">2nd Semester</option>
+            <option value="3rd semester">3rd Semester</option>
           </select>
         </div>
         <div class="form-control py-2 max-w-xs mx-auto">
-          <select class="select select-bordered w-full">
+          <select class="select select-bordered w-full" formControlName="section">
             <option disabled selected>Select Section</option>
             <option>IT-B</option>
             <option>IT-C</option>
           </select>
         </div>
         <div class="form-control py-2 max-w-xs mx-auto">
-          <select class="select select-bordered w-full">
+          <select class="select select-bordered w-full" formControlName="subject">
             <option disabled selected>Select Subject</option>
             <option>CP101</option>
             <option>CP102</option>
           </select>
         </div>
         <div class="form-control py-2 max-w-xs mx-auto">
-          <select class="select select-bordered w-full">
+          <select class="select select-bordered w-full" formControlName="room">
             <option disabled selected>Select Room</option>
             <option>Room 101</option>
             <option>Room 102</option>
@@ -117,7 +117,7 @@
       </div>
     </form>
     <div class="modal-action">
-      <button class="btn" (click)="closeCreateScheduleModal()">Confirm</button>
+      <button class="btn" (click)="onSubmitCreateSchedule()">Confirm</button>
       <button class="btn btn-ghost" (click)="closeCreateScheduleModal()">Close</button>
     </div>
   </div>
@@ -127,10 +127,10 @@
 <div class="modal modal-bottom sm:modal-middle" [ngClass]="{'modal-open': editScheduleModalState}">
   <div class="modal-box">
     <h3 class="font-bold text-lg">Edit Schedule</h3>
-    <form>
+    <form [formGroup]="form">
       <div class="mt-5">
         <div class="form-control py-2 max-w-xs mx-auto">
-          <select class="select select-bordered w-full">
+          <select class="select select-bordered w-full" formControlName="day">
             <option disabled selected>Select Day</option>
             <option value="sunday">Sunday</option>
             <option value="monday">Monday</option>
@@ -142,35 +142,35 @@
           </select>
         </div>
         <div class="form-control py-2 max-w-xs mx-auto">
-          <input type="time" class="input input-bordered" placeholder="Start Time" />
+          <input type="time" class="input input-bordered" placeholder="Start Time" formControlName="start_time" />
         </div>
         <div class="form-control py-2 max-w-xs mx-auto">
-          <input type="time" class="input input-bordered" placeholder="End Time" />
+          <input type="time" class="input input-bordered" placeholder="End Time" formControlName="end_time" />
         </div>
         <div class="form-control py-2 max-w-xs mx-auto">
-          <select class="select select-bordered w-full">
+          <select class="select select-bordered w-full" formControlName="semester">
             <option disabled selected>Select Semester</option>
-            <option value="1">1st Semester</option>
-            <option value="2">2nd Semester</option>
-            <option value="3">3rd Semester</option>
+            <option value="1st semester">1st Semester</option>
+            <option value="2nd semester">2nd Semester</option>
+            <option value="3rd semester">3rd Semester</option>
           </select>
         </div>
         <div class="form-control py-2 max-w-xs mx-auto">
-          <select class="select select-bordered w-full">
+          <select class="select select-bordered w-full" formControlName="section">
             <option disabled selected>Select Section</option>
             <option>IT-B</option>
             <option>IT-C</option>
           </select>
         </div>
         <div class="form-control py-2 max-w-xs mx-auto">
-          <select class="select select-bordered w-full">
+          <select class="select select-bordered w-full" formControlName="subject">
             <option disabled selected>Select Subject</option>
             <option>CP101</option>
             <option>CP102</option>
           </select>
         </div>
         <div class="form-control py-2 max-w-xs mx-auto">
-          <select class="select select-bordered w-full">
+          <select class="select select-bordered w-full" formControlName="room">
             <option disabled selected>Select Room</option>
             <option>Room 101</option>
             <option>Room 102</option>
@@ -179,7 +179,7 @@
       </div>
     </form>
     <div class="modal-action">
-      <button class="btn" (click)="closeEditScheduleModal()">Confirm</button>
+      <button class="btn" (click)="onSubmitEditSchedule()">Confirm</button>
       <button class="btn btn-ghost" (click)="closeEditScheduleModal()">Close</button>
     </div>
   </div>
@@ -192,7 +192,7 @@
     <h3 class="font-bold text-lg">Delete Schedule</h3>
     <p class="text-base mt-2">Are you sure you want to delete this schedule?</p>
     <div class="modal-action">
-      <button class="btn" (click)="closeArchiveScheduleModal()">Confirm</button>
+      <button class="btn" (click)="onSubmitArchiveSchedule()">Confirm</button>
       <button class="btn btn-ghost" (click)="closeArchiveScheduleModal()">Close</button>
     </div>
   </div>

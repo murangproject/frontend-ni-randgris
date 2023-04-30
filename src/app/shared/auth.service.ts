@@ -10,7 +10,24 @@ export interface User {
   last_name?: string;
   email?: string;
   role_type?: string;
+  schedule_id?: number;
+  schedules?: Schedule[];
   is_deleted?: boolean;
+}
+
+export interface Schedule {
+  id?: number;
+  day?: string;
+  start_time?: string;
+  end_time?: string;
+  semester?: string;
+  section?: string;
+  subject?: string;
+  room?: string;
+  status?: 'present' | 'absent' | 'not_visited';
+  comment?: string;
+  is_deleted?: boolean;
+  user_id?: number;
 }
 
 export interface UserLogin {
