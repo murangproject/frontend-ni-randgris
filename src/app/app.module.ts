@@ -13,6 +13,7 @@ import { HttpClientModule, HttpClientXsrfModule } from '@angular/common/http';
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
+    HttpClientXsrfModule
   ],
   providers: [HttpClientModule, HttpClientXsrfModule],
   bootstrap: [AppComponent]
