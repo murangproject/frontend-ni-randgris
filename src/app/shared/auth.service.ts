@@ -63,8 +63,6 @@ export class AuthService {
       'Accept': 'application/json'
     }
 
-    this.http.get(`${environment.apiUrl}/sanctum/csrf-cookie`).subscribe();
-
     return this.http.post<UserResponse>(`${environment.apiUrl}/login`, user, { headers: headers }).pipe(
       tap(
         res => {
