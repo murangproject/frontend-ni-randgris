@@ -17,7 +17,7 @@ import { Schedule } from '../shared/auth.service';
 export class PrintAttendanceComponent {
 
   user$ = this.users.getUsers().pipe(
-    switchMap(users => of(users.find(user => user.id === this.id))),
+    map(users => users.find(user => user.id === this.id)),
     map(user => user?.schedules ?? []),
   );
 
@@ -26,8 +26,9 @@ export class PrintAttendanceComponent {
   );
 
   activities$ = this.user$.pipe(
+    map(schedules => schedules.map(schedule => schedule.id)),
     switchMap(schedules => this.activities.getActivities().pipe(
-      map(activities => activities.filter(activity => activity.type === 'attendance')),
+      map(activities => activities.filter(activity => schedules.includes(parseInt(activity?.source ?? '-1')) )),
       map(activities => activities.map(activity => JSON.parse(activity.data ?? '') as Schedule)),
       map(activities => activities.map(activity => {
         return {

@@ -20,14 +20,13 @@ export class SchedulesComponent implements OnInit {
 
   filteredSemester: string = '';
 
-  schedules$ = this.users$.pipe(
-    switchMap(users => this.schedules.getSchedules().pipe(
-      map(schedules => schedules.filter(schedule => !schedule.is_deleted)),
-      map((schedules: Schedule[]) => schedules?.filter((schedule: Schedule) => schedule.semester?.includes(this.filteredSemester))),
-      map(schedules => schedules.filter(schedule => users.find(user => user.id === schedule.user_id)),
-      ),
-      map(schedules => schedules.filter(schedule => this.isToday(schedule.day ?? ''))),
-    )));
+  schedules$ = this.schedules.getSchedules().pipe(
+    map(schedules => schedules.filter(schedule => !schedule.is_deleted)),
+    map((schedules: Schedule[]) => schedules?.filter((schedule: Schedule) => schedule.semester?.includes(this.filteredSemester))),
+    map(schedules => schedules.filter(schedule => this.id === schedule.user_id),
+    ),
+    map(schedules => schedules.filter(schedule => this.isToday(schedule.day ?? ''))),
+  );
 
   activeSchedules$ = this.schedules$;
 
@@ -54,7 +53,7 @@ export class SchedulesComponent implements OnInit {
 
   isToday(day: string) {
     const today = new Date().getDay();
-    switch(day) {
+    switch (day) {
       case 'monday':
         return today === 1;
       case 'tuesday':
@@ -74,8 +73,11 @@ export class SchedulesComponent implements OnInit {
     }
   }
 
+  id: number = -1;
+
   constructor(private user: UsersService, private schedules: SchedulesService) { }
   ngOnInit(): void {
+    this.id = JSON.parse(localStorage.getItem('user') ?? '{}').id;
     this.user.init();
     this.schedules.init();
   }

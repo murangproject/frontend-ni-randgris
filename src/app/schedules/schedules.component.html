@@ -1,31 +1,39 @@
 <div class="h-full">
-    <h1 class="text-center text-2xl font-bold my-4">Your Schedule Today</h1>
-    <div class="overflow-x-auto shadow-lg">
-      <table class="table table-compact w-full text-center">
-        <thead>
-          <tr>
-            <th>Section</th>
-            <th>Name</th>
-            <th>Room</th>
-            <th>Schedule</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let schedule of activeSchedules$ | async">
-            <th>{{schedule.section}}</th>
-            <td>{{schedule.user?.first_name}} {{schedule.user?.last_name}}</td>
-            <td>{{schedule.room}}</td>
-            <td>{{schedule.start_time}} - {{schedule.end_time}}</td>
-          </tr>
-        </tbody>
-        <tfoot>
-          <tr>
-            <th>Section</th>
-            <th>Name</th>
-            <th>Room</th>
-            <th>Schedule</th>
-          </tr>
-        </tfoot>
-      </table>
-    </div>
+  <h1 class="text-center text-2xl font-bold my-4">Your Schedule Today</h1>
+
+  <div class="flex">
+    <select class="select select-bordered my-2 mx-auto" (change)="setFilteredSemester(filter.value)" #filter>
+      <option disabled selected>Select Semester</option>
+      <option value="">All</option>
+      <option value="1st semester">1st Semester</option>
+      <option value="2nd semester">2nd Semester</option>
+    </select>
+
+  </div>
+
+  <div class="overflow-x-auto shadow-lg">
+    <table class="table table-compact w-full text-center">
+      <thead>
+        <tr>
+          <th>Section</th>
+          <th>Room</th>
+          <th>Schedule</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let schedule of activeSchedules$ | async">
+          <th>{{schedule.section}}</th>
+          <td>{{schedule.room}}</td>
+          <td>{{schedule.start_time}} - {{schedule.end_time}}</td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <th>Section</th>
+          <th>Room</th>
+          <th>Schedule</th>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
 </div>
