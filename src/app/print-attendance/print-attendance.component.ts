@@ -1,21 +1,21 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivityService } from '../settings/activity.service';
-import { SchedulesService } from '../faculty-schedules/schedules.service';
+import { ActivatedRoute } from '@angular/router';
 import { UsersService } from '../users/users.service';
-import { last, map, of, switchMap, tap } from 'rxjs';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { switchMap, map, of } from 'rxjs';
 import { Schedule } from '../shared/auth.service';
 
 @Component({
-  selector: 'app-faculty-attendance',
+  selector: 'app-print-attendance',
   standalone: true,
-  imports: [CommonModule, RouterModule],
-  templateUrl: './faculty-attendance.component.html',
+  imports: [CommonModule],
+  templateUrl: './print-attendance.component.html',
   styles: [
   ]
 })
-export class FacultyAttendanceComponent implements OnInit {
+export class PrintAttendanceComponent {
+
   user$ = this.users.getUsers().pipe(
     switchMap(users => of(users.find(user => user.id === this.id))),
     map(user => user?.schedules ?? []),
@@ -34,7 +34,6 @@ export class FacultyAttendanceComponent implements OnInit {
       map(activities => activities.sort((a, b) => new Date(b.updated_at ?? '').getTime() - new Date(a.updated_at ?? '').getTime())),
     )),
   );
-
   id: number = -1;
 
   constructor(private activities: ActivityService, private users: UsersService, private activatedRoute: ActivatedRoute) { }
@@ -46,9 +45,10 @@ export class FacultyAttendanceComponent implements OnInit {
 
     this.activities.init();
     this.users.init();
+
+    setTimeout(() => {
+      window.print();
+    }, 1000);
   }
 
-  getLink() {
-    return `/print-attendance/${this.id}`;
-  }
 }

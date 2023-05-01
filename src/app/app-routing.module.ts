@@ -35,6 +35,11 @@ const routes: Routes = [
         loadComponent: () => import('./init/init.component').then(c => c.InitComponent)
       },
       {
+        path: 'print-attendance/:id',
+        title: 'Print Attendance',
+        loadComponent: () => import('./print-attendance/print-attendance.component').then(c => c.PrintAttendanceComponent)
+      },
+      {
         path: '',
         component: SidebarComponent,
         canActivate: [authGuard],

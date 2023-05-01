@@ -6,6 +6,7 @@ import { tap, map, switchMap, combineLatest } from 'rxjs';
 import { SchedulesService } from '../faculty-schedules/schedules.service';
 import { FormsModule, ReactiveFormsModule, UntypedFormBuilder } from '@angular/forms';
 import { Schedule } from '../shared/auth.service';
+import { ToastService } from '../shared/toast.service';
 
 @Component({
   selector: 'app-attendances',
@@ -59,7 +60,7 @@ export class AttendancesComponent implements OnInit {
 
   selectedScheduleId: number = -1;
 
-  constructor(private user: UsersService, private schedules: SchedulesService, private formBuilder: UntypedFormBuilder) { }
+  constructor(private user: UsersService, private schedules: SchedulesService, private formBuilder: UntypedFormBuilder, private toast: ToastService) { }
   ngOnInit(): void {
     this.user.init();
     this.schedules.init();
@@ -96,9 +97,13 @@ export class AttendancesComponent implements OnInit {
     this.schedules.updateScheduleStatus(this.selectedScheduleId, { comment: this.attendanceForm.value.comment }).subscribe(
       {
         next: () => {
+          this.toast.showToast('Successfully updated attendance comment.', true);
           this.schedules.init();
           this.user.init();
           this.closeAttendanceModal();
+        },
+        error: () => {
+          this.toast.showToast('Failed to update attendance comment.', false);
         }
       }
     );
@@ -125,8 +130,13 @@ export class AttendancesComponent implements OnInit {
     this.schedules.updateScheduleStatus(this.selectedScheduleId, { status: 'present' }).subscribe(
       {
         next: () => {
+          this.toast.showToast('Successfully updated attendance status.', true);
           this.schedules.init();
           this.user.init();
+          this.closeAttendanceModal();
+        },
+        error: () => {
+          this.toast.showToast('Failed to update attendance status.', false);
         }
       }
     );
@@ -136,8 +146,13 @@ export class AttendancesComponent implements OnInit {
     this.schedules.updateScheduleStatus(this.selectedScheduleId, { status: 'absent' }).subscribe(
       {
         next: () => {
+          this.toast.showToast('Successfully updated attendance status.', true);
           this.schedules.init();
           this.user.init();
+          this.closeAttendanceModal();
+        },
+        error: () => {
+          this.toast.showToast('Failed to update attendance status.', false);
         }
       }
     );
