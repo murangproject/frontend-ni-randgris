@@ -10,11 +10,14 @@ export class AppComponent implements OnInit {
 
   constructor (private router: Router) {}
   title = 'frontend';
+  theme: string = '';
   ngOnInit(): void {
     const token = localStorage.getItem('token');
     if(!token) {
       this.router.navigate(['/login']);
     }
+
+    this.theme = localStorage.getItem('theme') ?? 'light';
   }
 }
 

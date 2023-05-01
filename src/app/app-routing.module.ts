@@ -101,6 +101,11 @@ const routes: Routes = [
             path: 'settings',
             title: 'Settings',
             loadComponent: () => import('./settings/settings.component').then(c => c.SettingsComponent)
+          },
+          {
+            path: 'themes',
+            title: 'themes',
+            loadComponent: () => import('./themes/themes.component').then(c => c.ThemesComponent)
           }
         ],
       },

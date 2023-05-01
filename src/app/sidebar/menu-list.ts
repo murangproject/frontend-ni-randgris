@@ -25,6 +25,10 @@ export const Navbar = {
       label: 'Settings',
       link: '/settings',
     },
+    {
+      label: 'Themes',
+      link: '/themes',
+    },
   ],
   attendance_checker: [
     {
@@ -47,6 +51,10 @@ export const Navbar = {
       label: 'Settings',
       link: '/settings',
     },
+    {
+      label: 'Themes',
+      link: '/themes',
+    },
   ],
   faculty: [
     {
@@ -60,6 +68,10 @@ export const Navbar = {
     {
       label: 'Attendance Records',
       link: '/attendance-records',
+    },
+    {
+      label: 'Themes',
+      link: '/themes',
     },
   ],
 };
@@ -90,6 +102,10 @@ export const Sidebar = {
       label: 'Settings',
       link: '/settings',
     },
+    {
+      label: 'Themes',
+      link: '/themes',
+    },
   ],
   attendance_checker: [
     {
@@ -112,6 +128,10 @@ export const Sidebar = {
       label: 'Settings',
       link: '/settings',
     },
+    {
+      label: 'Themes',
+      link: '/themes',
+    },
   ],
   faculty: [
     {
@@ -125,6 +145,10 @@ export const Sidebar = {
     {
       label: 'Attendance Records',
       link: '/attendance-records',
+    },
+    {
+      label: 'Themes',
+      link: '/themes',
     },
   ],
 };

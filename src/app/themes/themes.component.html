@@ -1,0 +1,15 @@
+<div class="flex flex-wrap h-full gap-5 w-full items-center justify-center">
+  <div class="flex">
+    <h1 class="text-2xl font-bold my-5 text-center">
+      Select you awesome theme here!
+    </h1>
+  </div>
+  <div class="flex flex-row flex-wrap gap-2 mx-auto w-full items-center justify-center">
+    <ng-container *ngFor="let theme of themes">
+      <div class="p-5 shadow-lg rounded-lg flex flex-col w-[150px]" [attr.data-theme]="theme"
+        [ngClass]="{'border border-base-content': theme === selectedTheme}" (click)="setTheme(theme)">
+        <div class="font-bold">{{ theme }}</div>
+      </div>
+    </ng-container>
+  </div>
+</div>
