@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, Validators } from '@angular/forms';
 import { AuthService } from '../shared/auth.service';
 import { Route, Router } from '@angular/router';
+import { ToastService } from '../shared/toast.service';
 
 @Component({
   selector: 'app-init',
@@ -15,7 +16,7 @@ export class InitComponent implements OnInit {
     password: '',
     password_confirmation: ''
   }
-  constructor(private formBuilder: UntypedFormBuilder, private auth: AuthService, private router: Router) { }
+  constructor(private formBuilder: UntypedFormBuilder, private auth: AuthService, private router: Router, private toast: ToastService) { }
 
   ngOnInit(): void {
     this.form = this.formBuilder.group({
@@ -29,6 +30,7 @@ export class InitComponent implements OnInit {
 
     this.auth.initialize(this.form.value['password'], this.form.value['password_confirmation']).subscribe(
       data => {
+        this.toast.showToast('Initialization successful!', true);
         this.router.navigate(['/logout']);
       }
     );

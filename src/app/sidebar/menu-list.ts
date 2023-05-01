@@ -48,10 +48,6 @@ export const Navbar = {
       link: '/keys',
     },
     {
-      label: 'Settings',
-      link: '/settings',
-    },
-    {
       label: 'Themes',
       link: '/themes',
     },
@@ -123,10 +119,6 @@ export const Sidebar = {
     {
       label: 'Keys',
       link: '/keys',
-    },
-    {
-      label: 'Settings',
-      link: '/settings',
     },
     {
       label: 'Themes',

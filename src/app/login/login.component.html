@@ -23,6 +23,10 @@
           <input type="password" placeholder="Type here" class="input input-bordered w-full max-w-xs" formControlName="password" />
         </div>
 
+        <div class="flex justify-end">
+        <a class="link" [routerLink]="'/forgot-password'">Forgot Password</a>
+        </div>
+
         <button class="mt-4 btn btn-neutral text-neutral-content gap-4" (click)="onSubmit()">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
             stroke="currentColor" class="w-6 h-6">

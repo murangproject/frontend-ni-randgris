@@ -7,6 +7,7 @@ import { Schedule, User } from '../shared/auth.service';
 import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, Validators } from '@angular/forms';
 import { SchedulesService } from './schedules.service';
 import { SettingsService } from '../settings/settings.service';
+import { ToastService } from '../shared/toast.service';
 
 @Component({
   selector: 'app-faculty-schedules',
@@ -60,7 +61,7 @@ export class FacultySchedulesComponent implements OnInit {
     subject: '',
     room: '',
   }
-  constructor(private activatedRoute: ActivatedRoute, private formBulder: UntypedFormBuilder, private schedule: SchedulesService, private settings: SettingsService) { }
+  constructor(private activatedRoute: ActivatedRoute, private formBulder: UntypedFormBuilder, private schedule: SchedulesService, private settings: SettingsService, private toast: ToastService) { }
 
   ngOnInit(): void {
     this.activatedRoute.params.subscribe(params => {
@@ -88,6 +89,7 @@ export class FacultySchedulesComponent implements OnInit {
   // Create
   openCreateScheduleModal() {
     this.createScheduleModalState = true;
+    this.form.reset();
   }
 
   closeCreateScheduleModal() {
@@ -96,11 +98,20 @@ export class FacultySchedulesComponent implements OnInit {
   }
 
   onSubmitCreateSchedule() {
-    if (this.form.invalid) return;
+    if (this.form.invalid) {
+      this.toast.showToast('Please fill in all fields', false);
+      return;
+    }
 
-    this.schedule.createSchedule(this.id, this.form.value).subscribe((response: any) => {
-      this.schedule.init();
-      this.closeCreateScheduleModal();
+    this.schedule.createSchedule(this.id, this.form.value).subscribe({
+      next: (response: any) => {
+        this.schedule.init();
+        this.toast.showToast('Schedule created successfully', true);
+        this.closeCreateScheduleModal();
+      },
+      error: (error: any) => {
+        this.toast.showToast('Schedule creation failed', false);
+      }
     });
   }
 
@@ -108,10 +119,8 @@ export class FacultySchedulesComponent implements OnInit {
   openEditScheduleModal(scheduleId: number) {
     this.selectedScheduleId = scheduleId;
     this.editScheduleModalState = true;
-
     this.filteredSchedules$.subscribe((schedules: Schedule[]) => {
       this.form.patchValue(schedules.find((schedule: Schedule) => schedule.id === scheduleId));
-      console.log(this.form.value);
     });
   }
 
@@ -122,12 +131,20 @@ export class FacultySchedulesComponent implements OnInit {
   }
 
   onSubmitEditSchedule() {
-    if (this.form.invalid) return;
+    if (this.form.invalid) {
+      this.toast.showToast('Please fill in all fields', false);
+      return;
+    }
 
-    this.schedule.updateSchedule(this.selectedScheduleId, this.form.value).subscribe((response: any) => {
-      this.closeEditScheduleModal();
-      this.form.reset();
-      this.schedule.init();
+    this.schedule.updateSchedule(this.selectedScheduleId, this.form.value).subscribe({
+      next: (response: any) => {
+        this.toast.showToast('Schedule updated successfully', true);
+        this.schedule.init();
+        this.closeEditScheduleModal();
+      },
+      error: (error: any) => {
+        this.toast.showToast('Schedule update failed', false);
+      }
     });
   }
 
@@ -143,10 +160,18 @@ export class FacultySchedulesComponent implements OnInit {
   }
 
   onSubmitArchiveSchedule() {
-    this.schedule.archiveSchedule(this.selectedScheduleId).subscribe((response: any) => {
-      this.closeArchiveScheduleModal();
-      this.schedule.init();
-    });
+    this.schedule.archiveSchedule(this.selectedScheduleId).subscribe(
+      {
+        next: (response: any) => {
+          this.toast.showToast('Schedule archived successfully', true);
+          this.closeArchiveScheduleModal();
+          this.schedule.init();
+        },
+        error: (error: any) => {
+          this.toast.showToast('Schedule archive failed', false);
+        }
+      }
+    );
   }
 
   setFilteredSemester(semester: string) {

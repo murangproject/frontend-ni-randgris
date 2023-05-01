@@ -1,0 +1,66 @@
+<div class="h-full flex flex-col justify-center gap-5">
+  <div class="flex mx-auto mt-10">
+    <h1 class="text-2xl font-bold">My Profile</h1>
+  </div>
+  <div class="flex flex-row flex-wrap gap-10 mx-auto justify-center">
+    <div class="flex rounded-lg shadow-lg p-10 justify-center shadow-neutral-focus">
+      <form [formGroup]="profileForm">
+        <div class="form-control min-w-md">
+          <label class="label">
+            <span class="label-text">First Name</span>
+          </label>
+          <input type="text" class="input input-bordered" placeholder="First Name" formControlName="first_name">
+        </div>
+        <div class="form-control min-w-md">
+          <label class="label">
+            <span class="label-text">Middle Name</span>
+          </label>
+          <input type="text" class="input input-bordered" placeholder="Middle Name" formControlName="middle_name">
+        </div>
+        <div class="form-control min-w-md">
+          <label class="label">
+            <span class="label-text">Last Name</span>
+          </label>
+          <input type="text" class="input input-bordered" placeholder="Last Name" formControlName="last_name">
+        </div>
+        <div class="form-control min-w-md">
+          <label class="label">
+            <span class="label-text">Email Address</span>
+          </label>
+          <input type="text" class="input input-bordered" placeholder="Email Address" formControlName="email">
+        </div>
+        <button class="btn btn-neutral btn-wide mt-6" type="submit" (click)="onSubmitUpdateProfile()">
+          Update Profile
+        </button>
+      </form>
+    </div>
+
+
+    <!--- CHANGE PASSWORD -->
+    <div class="flex rounded-lg shadow-lg p-10 justify-center shadow-neutral-focus">
+      <form [formGroup]="passwordForm">
+        <div class="form-control min-w-md">
+          <label class="label">
+            <span class="label-text">Old Password</span>
+          </label>
+          <input type="password" class="input input-bordered" placeholder="Old Password" formControlName="old_password">
+        </div>
+        <div class="form-control min-w-md">
+          <label class="label">
+            <span class="label-text">New Password</span>
+          </label>
+          <input type="password" class="input input-bordered" placeholder="New Password" formControlName="new_password">
+        </div>
+        <div class="form-control min-w-md">
+          <label class="label">
+            <span class="label-text">Confirm Password</span>
+          </label>
+          <input type="password" class="input input-bordered" placeholder="Confirm Password" formControlName="new_password_confirmation">
+        </div>
+        <button class="btn btn-neutral btn-wide mt-6" type="submit" (click)="onSubmitChangePassword()">
+          Change Password
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

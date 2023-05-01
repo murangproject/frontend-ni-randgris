@@ -78,10 +78,10 @@
           </select>
         </div>
         <div class="form-control py-2 max-w-xs mx-auto">
-          <input type="time" class="input input-bordered" placeholder="Start Time" formControlName="start_time" step="900"/>
+          <input type="time" class="input input-bordered" placeholder="Start Time" formControlName="start_time" />
         </div>
         <div class="form-control py-2 max-w-xs mx-auto">
-          <input type="time" class="input input-bordered" placeholder="End Time" formControlName="end_time" step="900" />
+          <input type="time" class="input input-bordered" placeholder="End Time" formControlName="end_time" />
         </div>
         <div class="form-control py-2 max-w-xs mx-auto">
           <select class="select select-bordered w-full" formControlName="semester">
@@ -151,22 +151,19 @@
         <div class="form-control py-2 max-w-xs mx-auto">
           <select class="select select-bordered w-full" formControlName="section">
             <option disabled selected>Select Section</option>
-            <option>IT-B</option>
-            <option>IT-C</option>
+            <option *ngFor="let section of sections$ | async" [value]="section.name">{{section.name}}</option>
           </select>
         </div>
         <div class="form-control py-2 max-w-xs mx-auto">
           <select class="select select-bordered w-full" formControlName="subject">
             <option disabled selected>Select Subject</option>
-            <option>CP101</option>
-            <option>CP102</option>
+            <option *ngFor="let subject of subjects$ | async" [value]="subject.name">{{subject.name}}</option>
           </select>
         </div>
         <div class="form-control py-2 max-w-xs mx-auto">
           <select class="select select-bordered w-full" formControlName="room">
             <option disabled selected>Select Room</option>
-            <option>Room 101</option>
-            <option>Room 102</option>
+            <option *ngFor="let room of rooms$ | async" [value]="room.room_name">{{room.room_name}}</option>
           </select>
         </div>
       </div>

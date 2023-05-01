@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router';
 import { UsersService } from '../users/users.service';
 import { map, tap } from 'rxjs';
 import { User } from '../shared/auth.service';
+import { ToastService } from '../shared/toast.service';
 
 @Component({
   selector: 'app-faculty',
@@ -15,10 +16,8 @@ import { User } from '../shared/auth.service';
 })
 export class FacultyComponent implements OnInit {
   users$ = this.user.getUsers().pipe(
-    tap(users => console.log(users)),
     map(users => users.filter(user => !user.is_deleted)),
-    tap(users => console.log(JSON.stringify(users))),
-    );
+  );
 
   facultyUsers$ = this.users$.pipe(
     map(users => users.filter((user: User) => user.role_type === 'faculty'))

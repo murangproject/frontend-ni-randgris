@@ -8,6 +8,7 @@ import { SchedulesService } from '../faculty-schedules/schedules.service';
 import { RoomStatus } from '../key/key.model';
 import { ActivityService } from '../settings/activity.service';
 import { User } from '../shared/auth.service';
+import { ToastService } from '../shared/toast.service';
 
 @Component({
   selector: 'app-keys',
@@ -34,6 +35,7 @@ export class KeysComponent implements OnInit {
         return_time: this.format12HourTime(new Date(activity?.return_time ?? '')),
       }
     })),
+    map(activities => activities.sort((a, b) => new Date(new Date().toLocaleDateString() + ' ' + b.borrow_time ?? '').getTime() - new Date(new Date().toLocaleDateString()  + ' ' + a.borrow_time ?? '').getTime())),
   );
 
   schedules$ = this.schedules.getSchedules();
@@ -59,7 +61,7 @@ export class KeysComponent implements OnInit {
 
   currentUser: User = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user') ?? '') : {};
 
-  constructor(private activities: ActivityService, private settings: SettingsService, private schedules: SchedulesService, private users: UsersService) { }
+  constructor(private activities: ActivityService, private settings: SettingsService, private schedules: SchedulesService, private users: UsersService, private toast: ToastService) { }
   ngOnInit(): void {
     this.settings.initRooms();
     this.schedules.init();
@@ -93,8 +95,12 @@ export class KeysComponent implements OnInit {
   borrow() {
     this.settings.borrowRoom(this.selectedRoomId).subscribe({
       next: () => {
+        this.toast.showToast('Room borrowed successfully.', true);
         this.settings.initRooms();
         this.closeRoomKeyModal();
+      },
+      error: () => {
+        this.toast.showToast('Room is currently unavailable.', false);
       }
     });
   }
@@ -102,8 +108,12 @@ export class KeysComponent implements OnInit {
   returnRoom() {
     this.settings.returnRoom(this.selectedRoomId).subscribe({
       next: () => {
+        this.toast.showToast('Room returned successfully.', true);
         this.settings.initRooms();
         this.closeRoomKeyModal();
+      },
+      error: () => {
+        this.toast.showToast('Room is currently unavailable.', false);
       }
     });
   }
@@ -158,6 +168,8 @@ export class KeysComponent implements OnInit {
   openModal(room: Room) {
     if (!room.borrower || room.borrower === this.currentUser.id) {
       this.openRoomKeyModal(room.room_name, room.id);
+    } else {
+      this.toast.showToast('Room is currently unavailable.', false);
     }
   }
 

@@ -2,6 +2,20 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { BehaviorSubject, shareReplay, tap } from "rxjs";
 import { environment } from "src/environments/environment";
+import { withOptions } from "tailwindcss/plugin";
+
+export interface UpdateProfile {
+  first_name?: string;
+  middle_name?: string;
+  last_name?: string;
+  email?: string;
+}
+
+export interface ChangePassword {
+  old_password?: string;
+  new_password?: string;
+  new_password_confirmation?: string;
+}
 
 export interface User {
   id?: number;
@@ -12,6 +26,7 @@ export interface User {
   role_type?: string;
   schedule_id?: number;
   schedules?: Schedule[];
+  request_password_reset?: boolean;
   is_deleted?: boolean;
 }
 
@@ -107,6 +122,48 @@ export class AuthService {
           localStorage.removeItem('initialize');
         }
       ),
+      shareReplay({ bufferSize: 1, refCount: true })
+    );
+  }
+
+  updateProfile(id: number, user: UpdateProfile) {
+    const headers = {
+      'Authorization': `Bearer ${localStorage.getItem('token')}`
+    };
+
+    return this.http.put<{ message: string }>(
+      `${environment.apiUrl}/update-profile`,
+      user,
+      { headers: headers }
+    ).pipe(
+      tap(
+        res => {
+          localStorage.setItem("user", JSON.stringify(res ?? {}));
+        }
+      ),
+      shareReplay({ bufferSize: 1, refCount: true })
+    );
+  }
+
+  updatePassword(id: number, payload: ChangePassword) {
+    const headers = {
+      'Authorization': `Bearer ${localStorage.getItem('token')}`
+    };
+
+    return this.http.put<{ message: string }>(
+      `${environment.apiUrl}/update-password`,
+      payload,
+      { headers: headers }
+    ).pipe(
+      shareReplay({ bufferSize: 1, refCount: true })
+    );
+  }
+
+  requestPasswordReset(email: string){
+    return this.http.put<{ message: string }>(
+      `${environment.apiUrl}/request-password-reset`,
+      { email }
+    ).pipe(
       shareReplay({ bufferSize: 1, refCount: true })
     );
   }

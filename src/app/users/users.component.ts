@@ -5,6 +5,7 @@ import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, Validators } from
 import { UsersService } from './users.service';
 import { map } from 'rxjs';
 import { User } from '../shared/auth.service';
+import { ToastService } from '../shared/toast.service';
 
 @Component({
   selector: 'app-users',
@@ -45,7 +46,7 @@ export class UsersComponent implements OnInit {
 
   selectedUserId: number = -1;
 
-  constructor(private formBuilder: UntypedFormBuilder, private user: UsersService) { }
+  constructor(private formBuilder: UntypedFormBuilder, private user: UsersService, private toast: ToastService) { }
 
   ngOnInit(): void {
     this.form = this.formBuilder.group({
@@ -82,13 +83,19 @@ export class UsersComponent implements OnInit {
   }
 
   onSubmitCreateUserModal() {
-    if (this.form.invalid) return;
+    if (this.form.invalid) {
+      this.toast.showToast('Please fill up all fields.', false);
+      return;
+    }
 
     this.user.createUser(this.form.value).subscribe({
       next: data => {
-        console.log(data);
+        this.toast.showToast('User successfully created!', true);
         this.closeCreateUserModal();
         this.user.init();
+      },
+      error: error => {
+        this.toast.showToast(error.error.message, false);
       }
     });
   }
@@ -114,9 +121,12 @@ export class UsersComponent implements OnInit {
 
     this.user.editUser(this.selectedUserId, this.form.value).subscribe({
       next: data => {
-        console.log(data);
+        this.toast.showToast('User successfully updated!', true);
         this.closeEditUserModal();
         this.user.init();
+      },
+      error: error => {
+        this.toast.showToast(error.error.message, false);
       }
     });
   }
@@ -135,7 +145,7 @@ export class UsersComponent implements OnInit {
   onSubmitArchiveUserModal() {
     this.user.archiveUser(this.selectedUserId).subscribe({
       next: data => {
-        console.log(data);
+        this.toast.showToast('User successfully archived!', true);
         this.closeArchiveUserModal();
         this.user.init();
       }
@@ -156,7 +166,7 @@ export class UsersComponent implements OnInit {
   onSubmitResetPasswordUserModal() {
     this.user.resetUser(this.selectedUserId).subscribe({
       next: data => {
-        console.log(data);
+        this.toast.showToast('User password successfully reset!', true);
         this.closeResetPasswordUserModal();
         this.user.init();
       }
@@ -177,7 +187,7 @@ export class UsersComponent implements OnInit {
   onSubmitRestoreUserModal() {
     this.user.restoreUser(this.selectedUserId).subscribe({
       next: data => {
-        console.log(data);
+        this.toast.showToast('User successfully restored!', true);
         this.closeRestoreUserModal();
         this.user.init();
       }

@@ -16,8 +16,13 @@ const routes: Routes = [
     children: [
       {
         path: 'login',
-        title: 'Login Page',
+        title: 'CICT - Login',
         loadComponent: () => import('./login/login.component').then(c => c.LoginComponent)
+      },
+      {
+        path: 'forgot-password',
+        title: 'Forgot Password',
+        loadComponent: () => import('./forgot-password/forgot-password.component').then(c => c.ForgotPasswordComponent)
       },
       {
         path: 'logout',
@@ -91,6 +96,11 @@ const routes: Routes = [
             loadComponent: () => import('./profile/profile.component').then(c => c.ProfileComponent)
           },
           {
+            path: 'profile',
+            title: 'Profile',
+            loadComponent: () => import('./manage-profile/manage-profile.component').then(c => c.ManageProfileComponent)
+          },
+          {
             path: 'keys',
             title: 'Keys',
             data: { roles: ['admin', 'attendance_checker', 'faculty'] },
@@ -104,7 +114,7 @@ const routes: Routes = [
           },
           {
             path: 'themes',
-            title: 'themes',
+            title: 'Themes',
             loadComponent: () => import('./themes/themes.component').then(c => c.ThemesComponent)
           }
         ],
@@ -115,13 +125,6 @@ const routes: Routes = [
         pathMatch: 'full'
       }
     ],
-
-  },
-
-  {
-    path: '**',
-    redirectTo: 'login',
-    pathMatch: 'full'
   }
 ];
 

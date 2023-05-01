@@ -33,7 +33,6 @@ export class AttendancesComponent implements OnInit {
       map(schedules => schedules.filter(schedule => users.find(user => user.id === schedule.user_id)),
       ),
       map(schedules => schedules.filter(schedule => this.isToday(schedule.day ?? ''))),
-      tap(schedules => console.log(schedules)),
     )));
 
   amSchedules$ = this.schedules$.pipe(

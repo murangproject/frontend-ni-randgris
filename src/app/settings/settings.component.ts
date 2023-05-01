@@ -4,6 +4,8 @@ import { SettingsTab } from './settings.enum';
 import { Room, Section, SettingsService, Subject } from './settings.service';
 import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, Validators } from '@angular/forms';
 import { map } from 'rxjs';
+import { ToastService } from '../shared/toast.service';
+import { withOptions } from 'tailwindcss/plugin';
 
 @Component({
   selector: 'app-settings',
@@ -37,7 +39,7 @@ export class SettingsComponent implements OnInit {
     room_name: ['', [Validators.required]],
   });
 
-  constructor(private settings: SettingsService, private formBuilder: UntypedFormBuilder) { }
+  constructor(private settings: SettingsService, private formBuilder: UntypedFormBuilder, private toast: ToastService) { }
 
   ngOnInit(): void {
     this.settings.initSections();
@@ -69,6 +71,7 @@ export class SettingsComponent implements OnInit {
   // Create Section
   openCreateSectionModal() {
     this.createSectionModalState = true;
+    this.sectionForm.reset();
   }
 
   closeCreateSectionModal() {
@@ -77,10 +80,23 @@ export class SettingsComponent implements OnInit {
   }
 
   onSubmitCreateSection() {
-    this.settings.createSection(this.sectionForm.value).subscribe(data => {
-      this.settings.initSections();
-      this.closeCreateSectionModal();
-    });
+    if (this.sectionForm.invalid) {
+      this.toast.showToast('Please fill out all the required fields!', false);
+      return;
+    }
+
+    this.settings.createSection(this.sectionForm.value).subscribe(
+      {
+        next: data => {
+          this.toast.showToast('Section created successfully!', true);
+          this.settings.initSections();
+          this.closeCreateSectionModal();
+        },
+        error: err => {
+          this.toast.showToast(err.error.message, false);
+        }
+      }
+    );
   }
 
   // Edit Section
@@ -89,7 +105,6 @@ export class SettingsComponent implements OnInit {
     this.editSectionModalState = true;
     this.sections$.subscribe((sections: Section[]) => {
       this.sectionForm.patchValue(sections.find((section: Section) => section?.id === id) ?? {});
-      console.log(this.sectionForm.value);
     });
   }
 
@@ -100,9 +115,20 @@ export class SettingsComponent implements OnInit {
   }
 
   onSubmitEditSection() {
-    this.settings.updateSection(this.selectedSectionId, this.sectionForm.value).subscribe(data => {
-      this.settings.initSections();
-      this.closeEditSectionModal();
+    if (this.sectionForm.invalid) {
+      this.toast.showToast('Please fill out all the required fields!', false);
+      return;
+    }
+
+    this.settings.updateSection(this.selectedSectionId, this.sectionForm.value).subscribe({
+      next: data => {
+        this.toast.showToast('Section updated successfully!', true);
+        this.settings.initSections();
+        this.closeEditSectionModal();
+      },
+      error: err => {
+        this.toast.showToast(err.error.message, false);
+      }
     });
   }
 
@@ -118,15 +144,22 @@ export class SettingsComponent implements OnInit {
   }
 
   onSubmitArchiveSection() {
-    this.settings.deleteSection(this.selectedSectionId).subscribe(data => {
-      this.closeArchiveSectionModal();
-      this.settings.initSections();
-    });
+    this.settings.deleteSection(this.selectedSectionId).subscribe({
+      next: data => {
+        this.toast.showToast('Section archived successfully!', true);
+        this.closeArchiveSectionModal();
+        this.settings.initSections();
+      },
+      error: err => {
+        this.toast.showToast(err.error.message, false);
+      }
+    })
   }
 
   // Create Subject
   openCreateSubjectModal() {
     this.createSubjectModalState = true;
+    this.subjectForm.reset();
   }
 
   closeCreateSubjectModal() {
@@ -135,9 +168,20 @@ export class SettingsComponent implements OnInit {
   }
 
   onSubmitCreateSubject() {
-    this.settings.createSubject(this.subjectForm.value).subscribe(data => {
-      this.settings.initSubjects();
-      this.closeCreateSubjectModal();
+    if (this.subjectForm.invalid) {
+      this.toast.showToast('Please fill out all the required fields!', false);
+      return;
+    }
+
+    this.settings.createSubject(this.subjectForm.value).subscribe({
+      next: data => {
+        this.toast.showToast('Subject created successfully!', true);
+        this.settings.initSubjects();
+        this.closeCreateSubjectModal();
+      },
+      error: err => {
+        this.toast.showToast(err.error.message, false);
+      }
     });
   }
 
@@ -147,7 +191,6 @@ export class SettingsComponent implements OnInit {
     this.editSubjectModalState = true;
     this.subjects$.subscribe((subjects: Subject[]) => {
       this.subjectForm.patchValue(subjects.find((subject: Subject) => subject?.id === id) ?? {});
-      console.log(this.subjectForm.value);
     });
   }
 
@@ -158,9 +201,20 @@ export class SettingsComponent implements OnInit {
   }
 
   onSubmitEditSubject() {
-    this.settings.updateSubject(this.selectedSubjectId, this.subjectForm.value).subscribe(data => {
-      this.settings.initSubjects();
-      this.closeEditSubjectModal();
+    if (this.subjectForm.invalid) {
+      this.toast.showToast('Please fill out all the required fields!', false);
+      return;
+    }
+
+    this.settings.updateSubject(this.selectedSubjectId, this.subjectForm.value).subscribe({
+      next: data => {
+        this.toast.showToast('Subject updated successfully!', true);
+        this.settings.initSubjects();
+        this.closeEditSubjectModal();
+      },
+      error: err => {
+        this.toast.showToast(err.error.message, false);
+      }
     });
   }
 
@@ -176,15 +230,22 @@ export class SettingsComponent implements OnInit {
   }
 
   onSubmitArchiveSubject() {
-    this.settings.deleteSubject(this.selectedSubjectId).subscribe(data => {
-      this.closeArchiveSubjectModal();
-      this.settings.initSubjects();
+    this.settings.deleteSubject(this.selectedSubjectId).subscribe({
+      next: data => {
+        this.toast.showToast('Subject archived successfully!', true);
+        this.closeArchiveSubjectModal();
+        this.settings.initSubjects();
+      },
+      error: err => {
+        this.toast.showToast(err.error.message, false);
+      }
     });
   }
 
   // Create Room
   openCreateRoomModal() {
     this.createRoomModalState = true;
+    this.roomForm.reset();
   }
 
   closeCreateRoomModal() {
@@ -193,9 +254,20 @@ export class SettingsComponent implements OnInit {
   }
 
   onSubmitCreateRoom() {
-    this.settings.createRoom(this.roomForm.value).subscribe(data => {
-      this.settings.initRooms();
-      this.closeCreateRoomModal();
+    if (this.roomForm.invalid) {
+      this.toast.showToast('Please fill out all the required fields!', false);
+      return;
+    }
+
+    this.settings.createRoom(this.roomForm.value).subscribe({
+      next: data => {
+        this.toast.showToast('Room created successfully!', true);
+        this.settings.initRooms();
+        this.closeCreateRoomModal();
+      },
+      error: err => {
+        this.toast.showToast(err.error.message, false);
+      }
     });
   }
 
@@ -205,7 +277,6 @@ export class SettingsComponent implements OnInit {
     this.editRoomModalState = true;
     this.rooms$.subscribe((rooms: Room[]) => {
       this.roomForm.patchValue(rooms.find((room: Room) => room?.id === id) ?? {});
-      console.log(this.roomForm.value);
     });
   }
 
@@ -216,10 +287,23 @@ export class SettingsComponent implements OnInit {
   }
 
   onSubmitEditRoom() {
-    this.settings.updateRoom(this.selectedRoomId, this.roomForm.value).subscribe(data => {
-      this.settings.initRooms();
-      this.closeEditRoomModal();
-    });
+    if (this.roomForm.invalid) {
+      this.toast.showToast('Please fill out all the required fields!', false);
+      return;
+    }
+
+    this.settings.updateRoom(this.selectedRoomId, this.roomForm.value).subscribe(
+      {
+        next: data => {
+          this.toast.showToast('Room updated successfully!', true);
+          this.settings.initRooms();
+          this.closeEditRoomModal();
+        },
+        error: err => {
+          this.toast.showToast(err.error.message, false);
+        }
+      }
+    );
   }
 
   // Archive Room
@@ -234,10 +318,18 @@ export class SettingsComponent implements OnInit {
   }
 
   onSubmitArchiveRoom() {
-    this.settings.deleteRoom(this.selectedRoomId).subscribe(data => {
-      this.closeArchiveRoomModal();
-      this.settings.initRooms();
-    });
+    this.settings.deleteRoom(this.selectedRoomId).subscribe(
+      {
+        next: data => {
+          this.toast.showToast('Room archived successfully!', true);
+          this.closeArchiveRoomModal();
+          this.settings.initRooms();
+        },
+        error: err => {
+          this.toast.showToast(err.error.message, false);
+        }
+      }
+    );
   }
 
   setTab(tab: string) {

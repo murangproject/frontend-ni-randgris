@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../shared/auth.service';
 import { Router } from '@angular/router';
+import { ToastService } from '../shared/toast.service';
 
 @Component({
   selector: 'app-logout',

@@ -2,12 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, Validators } from '@angular/forms';
 import { AuthService } from '../shared/auth.service';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
+import { ToastService } from '../shared/toast.service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule],
   templateUrl: './login.component.html',
   styles: [
   ]
@@ -19,7 +20,7 @@ export class LoginComponent implements OnInit {
     email: null,
     password: null
   }
-  constructor(private formBuilder: UntypedFormBuilder, private auth: AuthService, private router: Router) { }
+  constructor(private formBuilder: UntypedFormBuilder, private auth: AuthService, private router: Router, private toast:ToastService) { }
 
   ngOnInit(): void {
     this.form = this.formBuilder.group({
@@ -32,6 +33,7 @@ export class LoginComponent implements OnInit {
         if (data) {
           const init = JSON.parse(localStorage.getItem('initialize') || 'false');
           if(init) {
+            this.toast.showToast('Welcome to the system! Initialize your account to continue!', true);
             this.router.navigate(['/init']);
           } else {
             this.router.navigate(['/']);
@@ -42,6 +44,13 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit() {
-    this.auth.login(this.form.value).subscribe();
+    this.auth.login(this.form.value).subscribe({
+      next: data => {
+        this.toast.showToast('Login successful!', true);
+      },
+      error: error => {
+        this.toast.showToast(error.error.message, false);
+      }
+    });
   }
 }

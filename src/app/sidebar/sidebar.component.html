@@ -11,8 +11,12 @@
           </svg>
         </label>
       </div>
-      <div class="navbar-start flex font-bold px-2 mx-2">CICT</div>
-      <div class="hidden lg:block navbar-center shadow-md shadow-gray-500 rounded-lg border border-neutral overflow-clip items-center">
+      <div class="navbar-start flex font-bold px-2 mx-2">
+        <img src="assets/icons/CICT.png" alt="logo" class="w-10 h-10 rounded-full mr-2">
+        CICT - CMKIS
+      </div>
+      <div
+        class="hidden lg:block navbar-center shadow-md shadow-gray-500 rounded-lg border border-neutral overflow-clip items-center">
         <ul class="menu menu-horizontal">
           <!-- Navbar menu content here -->
           <li [routerLinkActive]="'text-primary-content bg-primary'" *ngFor="let menu of navBarItems">
@@ -21,6 +25,7 @@
         </ul>
       </div>
       <div class="navbar-end">
+        <a class="btn btn-ghost" href="/profile">Profile</a>
         <a class="btn btn-ghost" href="/logout">Logout</a>
       </div>
     </div>
@@ -31,11 +36,17 @@
   <div class="drawer-side">
     <label for="my-drawer-3" class="drawer-overlay"></label>
     <ul class="menu p-4 w-80 bg-base-100">
-      <!-- Sidebar content here -->
+      <li>
+        <a class="font-bold text-start">
+            <img src="assets/icons/CICT.png" alt="logo" class="w-10 h-10 rounded-full mr-2">
+            CICT - CMKIS
+        </a>
+      </li>
       <li [routerLinkActive]="'text-primary'" *ngFor="let menu of navBarItems">
         <a class="font-bold text-start" [routerLink]="menu.link">{{ menu.label }}</a>
       </li>
       <li class="mt-auto">
+        <a class="font-bold text-start" href="/profile">Profile</a>
         <a class="font-bold text-start" href="/logout">Logout</a>
       </li>
     </ul>

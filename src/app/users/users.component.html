@@ -38,7 +38,11 @@
             <td class="space-x-2">
               <button class="btn btn-sm" (click)="openEditUserModal(user?.id ?? -1)">Edit</button>
               <button class="btn btn-sm" (click)="openArchiveUserModal(user?.id ?? -1)">Archive</button>
-              <button class="btn btn-sm" (click)="openResetPasswordUserModal(user?.id ?? -1)">Reset</button>
+
+              <div class="indicator">
+                <span class="indicator-item badge badge-error" *ngIf="user.request_password_reset">Requested</span>
+                <button class="btn btn-sm" (click)="openResetPasswordUserModal(user?.id ?? -1)">Reset</button>
+              </div>
             </td>
           </tr>
         </tbody>

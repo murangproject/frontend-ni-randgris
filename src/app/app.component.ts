@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { ToastService } from './shared/toast.service';
 
 @Component({
   selector: 'app-root',
@@ -8,7 +9,9 @@ import { Router } from '@angular/router';
 })
 export class AppComponent implements OnInit {
 
-  constructor (private router: Router) {}
+  toast$ = this.toast.getToast();
+
+  constructor (private router: Router, private toast: ToastService) {}
   title = 'frontend';
   theme: string = '';
   ngOnInit(): void {
@@ -16,7 +19,6 @@ export class AppComponent implements OnInit {
     if(!token) {
       this.router.navigate(['/login']);
     }
-
     this.theme = localStorage.getItem('theme') ?? 'light';
   }
 }
