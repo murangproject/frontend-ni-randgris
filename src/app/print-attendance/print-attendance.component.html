@@ -1,5 +1,10 @@
 <div class="h-full">
-<div class="overflow-x-auto">
+  <div class="flex justify-content text-center w-full my-2">
+    <h1 class="text-lg font-bold text-center">
+      Faculty Name: {{(getUser$ | async)?.first_name ?? ''}} {{(getUser$ | async)?.last_name ?? ''}}
+    </h1>
+  </div>
+  <div class="overflow-x-auto">
     <table class="table table-compact w-full">
       <thead>
         <tr>
@@ -35,4 +40,3 @@
     </table>
   </div>
 </div>
-

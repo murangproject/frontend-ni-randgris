@@ -46,4 +46,8 @@ export class ProfileComponent implements OnInit {
     this.activities.init();
     this.users.init();
   }
+
+  getLink() {
+    return `/print-attendance/${this.id}`;
+  }
 }

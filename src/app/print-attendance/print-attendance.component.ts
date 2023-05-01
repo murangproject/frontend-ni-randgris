@@ -21,6 +21,10 @@ export class PrintAttendanceComponent {
     map(user => user?.schedules ?? []),
   );
 
+  getUser$ = this.users.getUsers().pipe(
+    switchMap(users => of(users.find(user => user.id === this.id))),
+  );
+
   activities$ = this.user$.pipe(
     switchMap(schedules => this.activities.getActivities().pipe(
       map(activities => activities.filter(activity => activity.type === 'attendance')),
